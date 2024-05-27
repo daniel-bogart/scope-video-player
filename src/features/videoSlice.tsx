@@ -23,7 +23,11 @@ const videoSlice = createSlice({
   initialState,
   reducers: {
     setVideos: (state, action: PayloadAction<Video[]>) => {
-      state.list = action.payload;
+      if (Array.isArray(action.payload)) {
+        state.list = action.payload;
+      } else {
+        console.error("Payload is not an array:", action.payload);
+      }
     },
     addVideo: (state, action: PayloadAction<Video>) => {
       state.list.push(action.payload);
@@ -40,7 +44,12 @@ export const fetchVideos =
       const response = await axios.get(
         `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
       );
-      dispatch(setVideos(response.data));
+      if (Array.isArray(response.data)) {
+        console.log("Fetched videos in fetchVideos action:", response.data); // Log API response
+        dispatch(setVideos(response.data));
+      } else {
+        console.error("Fetched data is not an array:", response.data);
+      }
     } catch (error) {
       console.error("Error fetching videos:", error);
     }

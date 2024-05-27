@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { setVideos, fetchVideos } from "../features/videoSlice";
+import { setVideos } from "../features/videoSlice";
 import { RootState, AppDispatch } from "../store/store";
 
 interface Video {
@@ -16,11 +16,18 @@ interface Video {
 }
 
 const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
-  const { data } = await axios.get<Video[]>(
+  const { data } = await axios.get(
     `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
   );
+
   console.log("Fetched data from API:", data); // Log API response
-  return data;
+
+  if (data && Array.isArray(data.videos)) {
+    return data.videos; // Return the videos array
+  } else {
+    console.error("API response is not as expected:", data);
+    return []; // Return an empty array if the response is not as expected
+  }
 };
 
 const Home = () => {
@@ -45,13 +52,18 @@ const Home = () => {
 
   useEffect(() => {
     console.log("Global state video list in useEffect:", videoList);
+    if (Array.isArray(videoList) && videoList.length > 0) {
+      console.log("Video list:", videoList);
+    } else {
+      console.log("Video list is empty or not an array:", videoList);
+    }
   }, [videoList]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading videos</div>;
 
   if (!Array.isArray(videoList) || videoList.length === 0) {
-    console.log("Video list is empty or not an array:", videoList); // Log videoList validation
+    console.log("Video list is empty or not an array:", videoList);
     return <div>No videos found</div>;
   }
 

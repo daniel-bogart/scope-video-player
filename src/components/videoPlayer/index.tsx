@@ -1,64 +1,86 @@
 import React, { useRef, useState } from "react";
+import YouTube, { YouTubeProps } from "react-youtube";
 import ReactPlayer from "react-player";
 
 interface VideoPlayerProps {
   url: string;
 }
 
-const getFileType = (url: string): string => {
-  const extension = url.split(".").pop();
-  switch (extension) {
-    case "mp4":
-      return "video/mp4";
-    case "webm":
-      return "video/webm";
-    case "ogg":
-      return "video/ogg";
-    default:
-      return "video/mp4"; // Fallback to mp4 if unknown
-  }
-};
-
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const playerRef = useRef<any>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (playing) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setPlaying(!playing);
+  const onReady: YouTubeProps["onReady"] = (event) => {
+    playerRef.current = event.target;
+  };
+
+  const playVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.playVideo();
+      setIsPlaying(true);
     }
   };
 
+  const pauseVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.pauseVideo();
+      setIsPlaying(false);
+    }
+  };
+
+  const rewindVideo = () => {
+    if (playerRef.current) {
+      const currentTime = playerRef.current.getCurrentTime();
+      playerRef.current.seekTo(currentTime - 10);
+    }
+  };
+
+  const changePlaybackRate = (rate: number) => {
+    if (playerRef.current) {
+      playerRef.current.setPlaybackRate(rate);
+      setPlaybackRate(rate);
+    }
+  };
+
+  const youTubeID = getYouTubeID(url);
+  const isYouTube = youTubeID !== null;
+
   return (
-    <div className="video-player bg-black p-2 rounded-lg">
-      {url.startsWith("blob:") ? (
-        <video ref={videoRef} className="w-full h-auto rounded-lg" controls>
-          <source src={url} type={getFileType(url)} />
-        </video>
+    <div>
+      {isYouTube ? (
+        <YouTube
+          videoId={youTubeID ?? ""}
+          onReady={onReady}
+          opts={{ playerVars: { controls: 0 } }}
+        />
       ) : (
         <ReactPlayer
           url={url}
-          controls
-          width="100%"
-          height="100%"
-          className="rounded-lg"
+          ref={playerRef}
+          controls={false}
+          playing={isPlaying}
+          playbackRate={playbackRate}
         />
       )}
-      <div className="flex justify-between items-center mt-2">
-        <button
-          onClick={handlePlayPause}
-          className="bg-blue-500 text-white p-2 rounded"
-        >
-          {playing ? "Pause" : "Play"}
+      <div>
+        <button onClick={isPlaying ? pauseVideo : playVideo}>
+          {isPlaying ? "Pause" : "Play"}
         </button>
+        <button onClick={rewindVideo}>Rewind 10s</button>
+        <button onClick={() => changePlaybackRate(1)}>1x</button>
+        <button onClick={() => changePlaybackRate(1.5)}>1.5x</button>
+        <button onClick={() => changePlaybackRate(2)}>2x</button>
       </div>
     </div>
   );
+};
+
+const getYouTubeID = (url: string): string | null => {
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
 };
 
 export default VideoPlayer;

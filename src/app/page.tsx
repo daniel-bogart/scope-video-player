@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { setVideos } from "../features/videoSlice";
 import { RootState, AppDispatch } from "../store/store";
-import VideoPlayer from "../components/videoPlayer";
+import VideoPlayer from "../components/VideoPlayer";
 
 interface Video {
   id: string;

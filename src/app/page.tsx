@@ -102,8 +102,8 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full flex flex-col items-start justify-start overflow-hidden">
-      <div className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-start justify-start">
+    <div className="w-full flex flex-col items-start justify-start overflow-hidden bg-black">
+      <section className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-start justify-start bg-black">
         <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30">
           <Image
             src={logoIcon}
@@ -129,17 +129,23 @@ const Home = () => {
             src={heroReel}
           />
         </div>
-      </div>
-      <h1 className="text-2xl font-bold mb-4">Educational Videos</h1>
-      <ul className="space-y-4">
-        {videoList.map((video: Video) => (
-          <li key={video.id} className="bg-white shadow-md rounded-lg p-4">
-            <h2 className="text-xl font-semibold mb-2">{video.title}</h2>
-            <p className="text-gray-700 mb-2">{video.description}</p>
-            <VideoPlayer url={video.video_url} />
-          </li>
-        ))}
-      </ul>
+      </section>
+      <section className="flex flex-col items-center justify-center w-full">
+        <div className="flex flex-col w-full max-w-screen-xl items-start justify-center py-20 px-10">
+          <h1 className="text-9xl font-bold mb-4 text-white">
+            Featured Videos
+          </h1>
+          <ul className="space-y-4">
+            {videoList.map((video: Video) => (
+              <li key={video.id} className="bg-white shadow-md rounded-lg p-4">
+                <h2 className="text-xl font-semibold mb-2">{video.title}</h2>
+                <p className="text-gray-700 mb-2">{video.description}</p>
+                <VideoPlayer url={video.video_url} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </div>
   );
 };

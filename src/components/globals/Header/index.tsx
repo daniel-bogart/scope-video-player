@@ -38,13 +38,13 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
       <div className="w-full flex justify-between items-center py-5 max-w-screen-xl px-10">
         {!menuActive && (
           <Link href="/" className="flex max-w-xs">
-            <Image src={logo} alt="PCM Logo" width={220} height={88} />
+            <Image src={logo} alt="EdTech Logo" width={220} height={88} />
           </Link>
         )}
         <div
           ref={linksRef}
           className={`flex items-center justify-between gap-3 box-border ${
-            linksMenuOpen ? "pcm-header__links--open" : ""
+            linksMenuOpen ? "et-header__links--open" : ""
           }`}
         >
           <div className="flex items-center justify-between gap-3 box-border">
@@ -52,7 +52,7 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
               <div className="max-w-xs">
                 <Image
                   src={logo}
-                  alt="PCM Logo White"
+                  alt="EdTech Logo White"
                   width={320}
                   height={88}
                 />
@@ -110,11 +110,18 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
                         setMenuActive(false);
                       }
                     }}
-                    className={`text-xl leading-10 font-medium cursor-pointer py-1 px-5 ${
-                      rootPath === url ? "border-b-2 border-black" : ""
-                    }`}
+                    className={`text-xl leading-10 font-medium cursor-pointer py-1 px-5`}
                   >
-                    <Link href={url} className="text-black">
+                    <Link
+                      href={url}
+                      className={classNames(
+                        "text-black font-light text-lg leading-8 relative before:content-[''] before:bg-black before:h-[2px] before:bottom-[-4px] before:absolute before:w-0 before:left-0 before:right-auto before:transition-all before:duration-300 before:ease-out hover:before:w-full before:[&:not(:hover)]:w-0 before:[&:not(:hover)]:left-auto before:[&:not(:hover)]:right-0",
+                        {
+                          "after:content-[''] after:bg-black after:h-[2px] after:absolute after:left-0 after:opacity-1 after:w-full after:transition-all after:duration-300 after:ease-out after:bottom-[-4px] after:bottom-[-2px] after:w-full before:hidden":
+                            rootPath === url,
+                        }
+                      )}
+                    >
                       {title}
                     </Link>
                   </div>
@@ -127,7 +134,5 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
     </header>
   );
 });
-
-Header.displayName = "Header"; // Optional but helpful for debugging
 
 export default Header;

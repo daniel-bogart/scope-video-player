@@ -13,6 +13,8 @@ import Lenis from "@studio-freight/lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Header, FloatingNav } from "../components/globals";
+import { useCheckScreenSize } from "../lib/checkScreenSize";
+import classNames from "classnames";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,6 +31,8 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
 
   const headerRef = useRef<HTMLElement>(null);
   const floatingButtonRef = useRef<HTMLDivElement>(null);
+
+  const isTablet = useCheckScreenSize(1200);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -51,16 +55,22 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   }, [menuActive]);
 
   useEffect(() => {
-    if (headerRef.current) {
-      const header = headerRef.current;
-      gsap.set(header, { y: -header.offsetHeight });
+    if (isTablet && headerRef.current) {
+      gsap.set(headerRef.current, {
+        y: -headerRef.current.offsetHeight,
+      });
+      setShowFloatingButton(true);
+      return;
+    }
 
+    if (headerRef.current && !isTablet) {
+      const header = headerRef.current;
       ScrollTrigger.create({
         start: "top+=150 top",
         end: "bottom bottom",
-        trigger: header,
+        trigger: headerRef.current,
         onEnter: () => {
-          gsap.to(header, {
+          gsap.to(headerRef.current, {
             y: -header.offsetHeight,
             duration: 0.1,
             delay: 0.25,
@@ -68,8 +78,14 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
             onComplete: () => setShowFloatingButton(true),
           });
         },
+      });
+
+      ScrollTrigger.create({
+        start: "top+=100 top",
+        end: "bottom bottom",
+        trigger: headerRef.current,
         onLeaveBack: () => {
-          gsap.to(header, {
+          gsap.to(headerRef.current, {
             y: 0,
             duration: 0.25,
             ease: "power1.inOut",
@@ -81,7 +97,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         },
       });
     }
-  }, []);
+  }, [setShowFloatingButton, setMenuActive, isTablet]);
 
   const reactContextValue: ReactContextType = {
     menuActive,
@@ -98,8 +114,18 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <QueryClientProvider client={queryClient}>
             <ReactContext.Provider value={reactContextValue}>
               <Header ref={headerRef} />
-              <div className="et-main">{children}</div>
-              <FloatingNav/>
+              <div
+                className={classNames(
+                  "relative w-full transition-all duration-300 ease-out after:z-40 after:content-[''] after:absolute after:bg-[rgba(0,0,0,0.5)] after:w-full after:top-0 after:h-full after:left-0 after:transition-all after:duration-300 after:ease-out",
+                  {
+                    "after:opacity-1": menuActive,
+                    "after:opacity-0": !menuActive,
+                  }
+                )}
+              >
+                {children}
+              </div>
+              <FloatingNav />
             </ReactContext.Provider>
           </QueryClientProvider>
         </Provider>

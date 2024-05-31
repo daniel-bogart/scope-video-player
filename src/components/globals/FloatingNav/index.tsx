@@ -10,8 +10,8 @@ const FloatingNavButton: React.FC = () => {
   const floatingNavClasses = classNames(
     "group fixed z-[9999] flex items-center justify-center rounded-full transition-all duration-300 ease-out mix-blend-difference cursor-pointer",
     {
-      "w-20 h-20 right-10 top-10 bg-white": showFloatingButton && !menuActive,
-      "w-20 h-20 right-10 top-10 transform rotate-180 bg-white hover:rotate-0":
+      "w-20 h-20 right-14 top-8 bg-white": showFloatingButton && !menuActive,
+      "w-20 h-20 right-14 top-8 transform rotate-180 bg-white hover:rotate-0":
         showFloatingButton && menuActive,
       "w-0 h-0 bg-transparent": !showFloatingButton,
     }

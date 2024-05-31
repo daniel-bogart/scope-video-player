@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import axios from "axios";
+import gsap from "gsap";
+import Image from "next/image";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setVideos } from "../features/videoSlice";
 import { RootState, AppDispatch } from "../store/store";
 import VideoPlayer from "../components/videoPlayer";
+import NextVideo from "next-video";
+import heroReel from "../../videos/scopeReel.mp4";
+import logoIcon from "../images/LOGO_ICON.png";
+gsap.registerPlugin(ScrollTrigger);
 
 interface Video {
   id: string;
@@ -21,18 +28,26 @@ const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
     `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
   );
 
-  console.log("Fetched data from API:", data); // Log API response
-
   if (data && Array.isArray(data.videos)) {
-    return data.videos; // Return the videos array
+    const uniqueUrls = new Set<string>();
+    const filteredVideos = data.videos.filter((video: Video) => {
+      if (video.video_url.includes("blob") || uniqueUrls.has(video.video_url)) {
+        return false;
+      }
+      uniqueUrls.add(video.video_url);
+      return true;
+    });
+
+    return filteredVideos;
   } else {
     console.error("API response is not as expected:", data);
-    return []; // Return an empty array if the response is not as expected
+    return [];
   }
 };
 
 const Home = () => {
-  const userId = "daniel_bogart"; // Replace with actual user ID in snake case
+  const heroWrapperRef = useRef<HTMLDivElement>(null);
+  const userId = "daniel_bogart";
   const dispatch = useDispatch<AppDispatch>();
   const {
     data: videos,
@@ -42,21 +57,39 @@ const Home = () => {
     fetchVideosQuery(userId)
   );
 
+  const videoList = useSelector((state: RootState) => state.videos.list);
+
   useEffect(() => {
     if (videos) {
-      console.log("Fetched videos in useEffect:", videos); // Log fetched videos
       dispatch(setVideos(videos));
     }
   }, [videos, dispatch]);
 
-  const videoList = useSelector((state: RootState) => state.videos.list);
-
   useEffect(() => {
-    console.log("Global state video list in useEffect:", videoList);
-    if (Array.isArray(videoList) && videoList.length > 0) {
-      console.log("Video list:", videoList);
+    if (heroWrapperRef.current && videoList.length > 0) {
+      console.log("heroWrapperRef.current:", heroWrapperRef.current);
+
+      gsap.fromTo(
+        heroWrapperRef.current,
+        { y: -600 },
+        {
+          y: 0,
+          scrollTrigger: {
+            trigger: heroWrapperRef.current,
+            scrub: true,
+            start: "top bottom",
+            end: "bottom top",
+          },
+        }
+      );
+
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
     } else {
-      console.log("Video list is empty or not an array:", videoList);
+      console.error(
+        "heroWrapperRef is not attached to any element or videoList is empty"
+      );
     }
   }, [videoList]);
 
@@ -65,12 +98,37 @@ const Home = () => {
     return <div className="text-center mt-10">Error loading videos</div>;
 
   if (!Array.isArray(videoList) || videoList.length === 0) {
-    console.log("Video list is empty or not an array:", videoList);
     return <div className="text-center mt-10">No videos found</div>;
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="w-full flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-center justify-center">
+        <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30">
+          <Image
+            src={logoIcon}
+            alt="EdTech Logo Hero"
+            width={100}
+            height={100}
+          />
+          <h2 className="text-4xl font-semibold mix-blend-difference text-white">
+            Scroll to explore
+          </h2>
+        </div>
+        <div
+          ref={heroWrapperRef}
+          className="hero-wrapper h-[120vh] flex items-center justify-center w-full"
+        >
+          <NextVideo
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls={false}
+            src={heroReel}
+          />
+        </div>
+      </div>
       <h1 className="text-2xl font-bold mb-4">Educational Videos</h1>
       <ul className="space-y-4">
         {videoList.map((video: Video) => (

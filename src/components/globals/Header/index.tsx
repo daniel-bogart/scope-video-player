@@ -33,7 +33,7 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
   return (
     <header
       ref={ref}
-      className="fixed top-0 w-full bg-black z-50 h-24 flex justify-center items-center transition-all duration-200 ease-out"
+      className="fixed top-0 w-full bg-transparent z-50 h-24 flex justify-center items-center transition-all duration-200 ease-out"
     >
       <div className="w-full flex justify-between items-center py-5 max-w-screen-xl px-10">
         {!menuActive && (

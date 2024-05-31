@@ -15,6 +15,11 @@ const config: Config = {
       borderRadius: {
         custom: "32px",
       },
+      brightness: {
+        25: '.25',
+        80: '.8',
+        175: '1.75',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

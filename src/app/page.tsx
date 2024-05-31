@@ -102,8 +102,8 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center justify-center overflow-hidden">
-      <div className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-center justify-center">
+    <div className="w-full flex flex-col items-start justify-start overflow-hidden">
+      <div className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-start justify-start">
         <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30">
           <Image
             src={logoIcon}
@@ -117,9 +117,10 @@ const Home = () => {
         </div>
         <div
           ref={heroWrapperRef}
-          className="hero-wrapper h-[120vh] flex items-center justify-center w-full"
+          className="brightness-80 rounded-custom hero-wrapper h-[120vh] flex items-start justify-start w-full"
         >
           <NextVideo
+            className="rounded-custom h-[120vh] w-full object-cover object-center"
             autoPlay
             muted
             loop

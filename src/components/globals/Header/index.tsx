@@ -93,9 +93,15 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
               })}
             </div>
             <div
-              className={`fixed flex flex-col items-start justify-center max-w-xs w-full top-28 right-10 bg-white rounded-lg transition-[0.7s_cubic-bezier(0.8,0,0.1,1)] duration-700 ease-in-out w-full${
-                menuActive ? "h-auto py-4 px-2" : "h-0 w-0 overflow-hidden"
-              }`}
+              className={classNames(
+                "fixed flex flex-col items-start justify-center max-w-xs w-full top-28 right-10 bg-white rounded-lg transition-[0.7s_cubic-bezier(0.8,0,0.1,1)] duration-700 ease-in-out w-full",
+                {
+                  "w-full h-auto py-4 px-2 transition-[0.7s_cubic-bezier(0.8,0,0.1,1)]":
+                    menuActive,
+                  "w-0 h-0 overflow-hidden transition-[0.7s_cubic-bezier(0.8,0,0.1,1)]":
+                    !menuActive,
+                }
+              )}
             >
               <h5 className="text-gray-500 text-lg font-medium p-3">
                 Navigation

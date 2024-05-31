@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+  forwardRef,
+} from "react";
 import Link from "next/link";
 import { navLinks } from "../../../data/components/header";
 import { usePathname } from "next/navigation";
@@ -8,8 +14,8 @@ import { ReactContext, ReactContextType } from "../../context/reactContext";
 import Image from "next/image";
 import logo from "../../../images/FULL_LOGO_WHITE.png";
 
-const Header: React.FC = React.forwardRef<HTMLElement, {}>((_, ref) => {
-  const pathname = usePathname(); // Updated hook
+const Header = forwardRef<HTMLElement, {}>((_, ref) => {
+  const pathname = usePathname();
   const [linksMenuOpen, setLinksMenuOpen] = useState(false);
   const { menuActive, setMenuActive } =
     useContext<ReactContextType>(ReactContext);
@@ -111,5 +117,7 @@ const Header: React.FC = React.forwardRef<HTMLElement, {}>((_, ref) => {
     </header>
   );
 });
+
+Header.displayName = "Header"; // Optional but helpful for debugging
 
 export default Header;

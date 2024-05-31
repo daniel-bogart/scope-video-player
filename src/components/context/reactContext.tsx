@@ -2,6 +2,7 @@ import React from "react";
 
 export interface ReactContextType {
   menuActive: boolean;
+  showFloatingButton: boolean;
   setMenuActive: (active: boolean) => void;
   modalComponent: React.ReactNode;
   setModalComponent: (
@@ -14,4 +15,5 @@ export const ReactContext = React.createContext<ReactContextType>({
   setMenuActive: () => {},
   modalComponent: null,
   setModalComponent: () => {},
+  showFloatingButton: false,
 });

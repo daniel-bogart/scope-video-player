@@ -9,10 +9,11 @@ import Image from "next/image";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setVideos } from "../features/videoSlice";
 import { RootState, AppDispatch } from "../store/store";
-import VideoPlayer from "../components/videoPlayer";
 import NextVideo from "next-video";
 import heroReel from "../../videos/scopeReel.mp4";
-import logoIcon from "../images/LOGO_ICON.png";
+import logoIcon from "../../public/images/LOGO_ICON.png";
+import { getThumbnailUrl } from "../lib/getThumbNailUrl";
+import { truncateText } from "@/lib/charHelpers";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Video {
@@ -131,16 +132,38 @@ const Home = () => {
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col w-full max-w-screen-xl items-start justify-center py-20 px-10">
-          <h1 className="text-9xl font-bold mb-4 text-white">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
+          <h1 className="text-9xl font-light mb-4 text-white pb-10">
             Featured Videos
           </h1>
-          <ul className="space-y-4">
+          <ul className="grid grid-cols-3 gap-2 w-full">
             {videoList.map((video: Video) => (
-              <li key={video.id} className="bg-white shadow-md rounded-lg p-4">
-                <h2 className="text-xl font-semibold mb-2">{video.title}</h2>
-                <p className="text-gray-700 mb-2">{video.description}</p>
-                <VideoPlayer url={video.video_url} />
+              <li
+                key={video.id}
+                className="group w-full gap-1.5 flex flex-col transform transition-all duration-300 ease-out brightness-80 hover:brightness-100"
+              >
+                <div className="overflow-hidden w-full flex items-center justify-center h-[268px] cursor-pointer">
+                  <Image
+                    src={getThumbnailUrl(video.video_url)}
+                    alt={`${video.title} thumbnail`}
+                    width={564}
+                    height={317}
+                    className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out"
+                  />
+                </div>
+                <Image
+                  src={logoIcon}
+                  width={24}
+                  height={24}
+                  alt="EdTech Logo Small"
+                />
+                <div className="relative">
+                  <span className="absolute left-0 block h-[2px] w-0 bg-white transform transition-all duration-300 ease-out group-hover:w-full"></span>
+                  <span className="w-full h-[1px] brightness-50 absolute bg-white" />
+                </div>
+                <h2 className="text-lg mb-2 text-white font-light">
+                  {truncateText(video.title, 50)}
+                </h2>
               </li>
             ))}
           </ul>

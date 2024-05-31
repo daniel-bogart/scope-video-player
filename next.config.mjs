@@ -1,8 +1,10 @@
 import { withNextVideo } from "next-video/process";
-import path from "path";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ["img.youtube.com"],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       console.log("Applying file-loader for video files");

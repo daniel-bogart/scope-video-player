@@ -49,9 +49,7 @@ const CreateVideo: React.FC = () => {
       );
       dispatch(createVideo(video));
       alert("Video created successfully");
-      console.log("Created Video Object:", video);
     } catch (error) {
-      console.error("Error creating video:", error);
     }
   };
 

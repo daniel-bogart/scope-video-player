@@ -24,7 +24,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const [duration, setDuration] = useState(0);
   const { openModal } = useModal();
   const videoContainerRef = useRef<HTMLDivElement>(null);
-  console.log("isFullScreen", isFullScreen);
 
   useEffect(() => {
     if (playIconRef.current && pauseIconRef.current) {
@@ -51,7 +50,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   }, [isPlaying]);
 
   const togglePlayPause = () => {
-    console.log("HITTING");
     setIsPlaying(!isPlaying);
   };
 

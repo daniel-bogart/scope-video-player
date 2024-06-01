@@ -7,7 +7,6 @@ const nextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      console.log("Applying file-loader for video files");
       config.module.rules.push({
         test: /\.(mp4|webm|ogg|swf|ogv)$/,
         use: [

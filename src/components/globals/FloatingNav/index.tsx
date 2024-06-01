@@ -24,9 +24,6 @@ const FloatingNavButton: React.FC = () => {
     }
   );
 
-  console.log("showFloatingButton:", showFloatingButton);
-  console.log("menuActive:", menuActive);
-
   return (
     <div
       ref={floatingButtonRef}

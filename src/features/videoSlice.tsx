@@ -45,7 +45,6 @@ export const fetchVideos =
         `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
       );
       if (Array.isArray(response.data)) {
-        console.log("Fetched videos in fetchVideos action:", response.data); // Log API response
         dispatch(setVideos(response.data));
       } else {
         console.error("Fetched data is not an array:", response.data);

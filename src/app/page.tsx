@@ -197,7 +197,7 @@ const Home = () => {
                       alt={`${video.title} thumbnail`}
                       width={564}
                       height={317}
-                      className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out"
+                      className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out group-hover:rotate-1"
                     />
                   </div>
                   <Image

@@ -18,8 +18,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [played, setPlayed] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [volume, setVolume] = useState(0.8); // Initialize volume to 80%
   const { openModal } = useModal();
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  console.log("isFullScreen", isFullScreen);
 
   useEffect(() => {
     if (playIconRef.current && pauseIconRef.current) {
@@ -88,8 +91,34 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   }, [played]);
 
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(true);
+      if (videoContainerRef.current) {
+        const videoElement: any = videoContainerRef.current;
+        if (videoElement.requestFullscreen) {
+          videoElement.requestFullscreen();
+        } else if (videoElement.webkitRequestFullscreen) {
+          videoElement.webkitRequestFullscreen();
+        } else if (videoElement.msRequestFullscreen) {
+          videoElement.msRequestFullscreen();
+        }
+      }
+    } else {
+      setIsFullScreen(false);
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen();
+      }
+    }
+  };
+
   return (
     <div
+      ref={videoContainerRef}
       className={`video-player bg-black p-2 rounded-lg w-full max-w-video-vw h-video-vh box-border flex flex-col items-center ${
         isPlaying ? "is-playing" : ""
       }`}
@@ -123,7 +152,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
           volume={volume} // Set volume on the player
           width="100%"
           height="100%"
-          className="w-full h-full"
+          className={`"w-full h-full pointer-events-none" ${
+            isFullScreen ? "" : "iframe-rounded"
+          }`}
           onProgress={handleProgress}
         />
         <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
@@ -148,7 +179,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
               playerRef.current ? playerRef.current.getCurrentTime() : 0
             )}
           </div>
-          <div className="flex justify-between items-center box-border w-full flex-row h-[60px] mt-2">
+          <div className="flex justify-between justify-center items-center box-border w-full flex-row h-[60px] mt-2">
             <button
               onClick={togglePlayPause}
               className="bg-transparent text-white p-2 rounded"
@@ -216,6 +247,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
               playbackRate={playbackRate}
               setPlaybackRate={setPlaybackRate}
             />
+            <button onClick={toggleFullScreen} className="group">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
+              >
+                <path
+                  fill="currentColor"
+                  d="M3 21v-5h2v3h3v2zm13 0v-2h3v-3h2v5zM3 8V3h5v2H5v3zm16 0V5h-3V3h5v5z"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

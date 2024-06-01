@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from "tailwindcss/types/config";
 
 const config: Config = {
   content: [
@@ -12,16 +13,16 @@ const config: Config = {
         black: "#222",
         grey: "#bbb",
         white: "#e9e9e9",
-        flash: "#444"
+        flash: "#444",
       },
       borderRadius: {
         custom: "32px",
       },
       maxHeight: {
-        '0': '0',
-        '20': '5rem',
-        '40': '10rem',
-        'full': '100%',
+        "0": "0",
+        "20": "5rem",
+        "40": "10rem",
+        full: "100%",
       },
       maxWidth: {
         "video-vw": "calc(140.778vh)",
@@ -47,6 +48,17 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }: PluginAPI) {
+      addUtilities({
+        ".iframe-rounded": {
+          "& > div > iframe": {
+            "border-radius": "24px",
+          },
+        },
+      });
+    },
+  ],
 };
+
 export default config;

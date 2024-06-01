@@ -30,6 +30,8 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
             width="36"
             height="36"
             viewBox="0 0 24 24"
+            className="text-neutral-300 group-hover:text-white
+          transition-all duration-300 ease-out"
           >
             <g fill="none" stroke="currentColor" stroke-width="1.5">
               <path
@@ -46,6 +48,8 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
             width="36"
             height="36"
             viewBox="0 0 24 24"
+            className="text-neutral-300 group-hover:text-white
+          transition-all duration-300 ease-out"
           >
             <g fill="none" stroke="currentColor" stroke-width="1.5">
               <path

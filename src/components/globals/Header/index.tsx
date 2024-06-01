@@ -55,6 +55,7 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
                   alt="EdTech Logo White"
                   width={320}
                   height={88}
+                  priority
                 />
               </div>
             )}

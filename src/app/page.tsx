@@ -14,6 +14,7 @@ import heroReel from "../../videos/scopeReel.mp4";
 import logoIcon from "../../public/images/LOGO_ICON.png";
 import { getThumbnailUrl } from "../lib/getThumbNailUrl";
 import { truncateText } from "@/lib/charHelpers";
+import Link from "next/link";
 import snowyMountain from "../../public/images/snowyMountain.jpg";
 import climbing from "../../public/images/climbing.jpg";
 import mountaineering from "../../public/images/mountaineering.jpg";
@@ -186,28 +187,33 @@ const Home = () => {
                 key={video.id}
                 className="group w-full gap-1.5 flex flex-col transform transition-all duration-300 ease-out brightness-80 hover:brightness-100"
               >
-                <div className="overflow-hidden w-full flex items-center justify-center h-[268px] cursor-pointer">
+                <Link
+                  className="w-full gap-1.5 flex flex-col"
+                  href={`/videos/${video.id}`}
+                >
+                  <div className="overflow-hidden w-full flex items-center justify-center h-[268px] cursor-pointer">
+                    <Image
+                      src={getThumbnailUrl(video.video_url)}
+                      alt={`${video.title} thumbnail`}
+                      width={564}
+                      height={317}
+                      className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out"
+                    />
+                  </div>
                   <Image
-                    src={getThumbnailUrl(video.video_url)}
-                    alt={`${video.title} thumbnail`}
-                    width={564}
-                    height={317}
-                    className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out"
+                    src={logoIcon}
+                    width={24}
+                    height={24}
+                    alt="EdTech Logo Small"
                   />
-                </div>
-                <Image
-                  src={logoIcon}
-                  width={24}
-                  height={24}
-                  alt="EdTech Logo Small"
-                />
-                <div className="relative">
-                  <span className="absolute left-0 block h-[2px] w-0 bg-white transform transition-all duration-300 ease-out group-hover:w-full"></span>
-                  <span className="w-full h-[1px] brightness-50 absolute bg-white" />
-                </div>
-                <h2 className="text-lg mb-2 text-white font-light">
-                  {truncateText(video.title, 50)}
-                </h2>
+                  <div className="relative">
+                    <span className="absolute left-0 block h-[2px] w-0 bg-white transform transition-all duration-300 ease-out group-hover:w-full"></span>
+                    <span className="w-full h-[1px] brightness-50 absolute bg-white" />
+                  </div>
+                  <h2 className="text-lg mb-2 text-white font-light">
+                    {truncateText(video.title, 50)}
+                  </h2>
+                </Link>
               </li>
             ))}
           </ul>

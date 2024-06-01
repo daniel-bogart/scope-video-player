@@ -96,13 +96,13 @@ const VideoPage = ({ params }: VideoPageProps) => {
           <Description description={video.description} />
         </div>
         <div className="w-full py-10">
-          <h2 className="text-xl font-bold mb-4 text-white">Comments</h2>
+          <h2 className="text-xl font-bold mb-4 text-white after:">Comments</h2>
+          <CommentForm onAddComment={handleAddComment} />
           <CommentList
             comments={{ comments: (comments as any).comments }}
             loading={loadingComments}
           />
 
-          <CommentForm onAddComment={handleAddComment} />
         </div>
       </div>
     </div>

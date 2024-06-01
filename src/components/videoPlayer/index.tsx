@@ -157,7 +157,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
           </symbol>
         </defs>
       </svg>
-      <div className="relative w-full h-full rounded-lg">
+      <div className="group relative w-full h-full rounded-lg">
         <div className="w-full h-full" onClick={() => togglePlayPause()}>
           <ReactPlayer
             ref={playerRef}
@@ -180,7 +180,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
           ></button>
         </div>
         <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
-        <div className="flex flex-col w-full px-4 absolute bottom-0 left-0">
+        <div className="flex flex-col w-full px-4 absolute bottom-0 left-0 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-1000 ease-out">
           <input
             type="range"
             min={0}
@@ -212,7 +212,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
               playerRef.current ? playerRef.current.getCurrentTime() : 0
             )}
           </div>
-          <div className="flex justify-between justify-center items-center box-border w-full flex-row h-[60px] mt-2">
+          <div className="flex justify-between justify-center items-center box-border w-full flex-row h-[60px] mt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-1000 ease-out">
             <div className="flex justify-start items-center box-border w-full">
               <button
                 onClick={togglePlayPause}

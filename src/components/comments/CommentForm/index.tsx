@@ -27,7 +27,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ onAddComment }) => {
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="w-full p-2 rounded text-black"
+        className="relative w-full bg-white p-2 rounded text-black outline-none border-none after:content-[''] after:bg-white after:h-[2px] after:absolute after:left-0 after:opacity-1 after:w-full after:transition-all after:duration-300 after:ease-out after:bottom-[-4px] after:bottom-[-2px] after:w-0"
         placeholder="Add a comment..."
       />
       <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">

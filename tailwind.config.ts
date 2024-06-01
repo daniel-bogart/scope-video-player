@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import type { PluginAPI } from "tailwindcss/types/config";
+import type { PluginAPI, PluginCreator } from "tailwindcss/types/config";
 
 const config: Config = {
   content: [
@@ -58,6 +58,7 @@ const config: Config = {
         },
       });
     },
+    
   ],
 };
 

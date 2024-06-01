@@ -116,7 +116,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
               <Header ref={headerRef} />
               <div
                 className={classNames(
-                  "relative w-full transition-all duration-300 ease-out after:z-40 after:content-[''] after:absolute after:bg-[rgba(0,0,0,0.5)] after:w-full after:top-0 after:h-full after:left-0 after:transition-all after:duration-300 after:ease-out",
+                  "relative bg-black w-full transition-all duration-300 ease-out after:z-40 after:content-[''] after:absolute after:bg-[rgba(0,0,0,0.5)] after:w-full after:top-0 after:h-full after:left-0 after:transition-all after:duration-300 after:ease-out after:pointer-events-none",
                   {
                     "after:opacity-1": menuActive,
                     "after:opacity-0": !menuActive,

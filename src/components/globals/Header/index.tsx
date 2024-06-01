@@ -12,7 +12,7 @@ import { navLinks } from "../../../data/components/header";
 import { usePathname } from "next/navigation";
 import { ReactContext, ReactContextType } from "../../context/reactContext";
 import Image from "next/image";
-import logo from "../../../images/FULL_LOGO_WHITE.png";
+import logo from "../../../../public/images/FULL_LOGO_WHITE.png";
 import classNames from "classnames";
 
 const Header = forwardRef<HTMLElement, {}>((_, ref) => {
@@ -33,9 +33,9 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
   return (
     <header
       ref={ref}
-      className="fixed top-0 w-full bg-black z-50 h-24 flex justify-center items-center transition-all duration-200 ease-out"
+      className="fixed top-0 w-full bg-transparent z-50 h-24 flex justify-center items-center transition-all duration-200 ease-out"
     >
-      <div className="w-full flex justify-between items-center py-5 max-w-screen-xl px-10">
+      <div className="w-full flex justify-between items-center py-5 max-w-screen-2xl px-10">
         {!menuActive && (
           <Link href="/" className="flex max-w-xs">
             <Image src={logo} alt="EdTech Logo" width={220} height={88} />
@@ -55,6 +55,7 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
                   alt="EdTech Logo White"
                   width={320}
                   height={88}
+                  priority
                 />
               </div>
             )}

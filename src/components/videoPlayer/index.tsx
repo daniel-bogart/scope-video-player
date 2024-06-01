@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
-import YouTube, { YouTubeProps } from "react-youtube";
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
 import ReactPlayer from "react-player";
 
 interface VideoPlayerProps {
@@ -11,20 +12,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
 
-  const onReady: YouTubeProps["onReady"] = (event) => {
-    playerRef.current = event.target;
-  };
+  console.log("VideoPlayer url:", url)
 
   const playVideo = () => {
     if (playerRef.current) {
-      playerRef.current.playVideo();
+      playerRef.current.play();
       setIsPlaying(true);
     }
   };
 
   const pauseVideo = () => {
     if (playerRef.current) {
-      playerRef.current.pauseVideo();
+      playerRef.current.pause();
       setIsPlaying(false);
     }
   };
@@ -43,44 +42,52 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   };
 
-  const youTubeID = getYouTubeID(url);
-  const isYouTube = youTubeID !== null;
-
   return (
-    <div>
-      {isYouTube ? (
-        <YouTube
-          videoId={youTubeID ?? ""}
-          onReady={onReady}
-          opts={{ playerVars: { controls: 0 } }}
-        />
-      ) : (
-        <ReactPlayer
-          url={url}
-          ref={playerRef}
-          controls={false}
-          playing={isPlaying}
-          playbackRate={playbackRate}
-        />
-      )}
-      <div>
-        <button onClick={isPlaying ? pauseVideo : playVideo}>
+    <div className="video-player bg-black p-2 rounded-lg">
+      <ReactPlayer
+        ref={playerRef}
+        url={url}
+        playing={isPlaying}
+        controls={true}
+        playbackRate={playbackRate}
+        width="100%"
+        height="100%"
+        className="rounded-lg"
+      />
+      <div className="flex justify-between items-center mt-2">
+        <button
+          onClick={isPlaying ? pauseVideo : playVideo}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
           {isPlaying ? "Pause" : "Play"}
         </button>
-        <button onClick={rewindVideo}>Rewind 10s</button>
-        <button onClick={() => changePlaybackRate(1)}>1x</button>
-        <button onClick={() => changePlaybackRate(1.5)}>1.5x</button>
-        <button onClick={() => changePlaybackRate(2)}>2x</button>
+        <button
+          onClick={rewindVideo}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          Rewind 10s
+        </button>
+        <button
+          onClick={() => changePlaybackRate(1)}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          1x
+        </button>
+        <button
+          onClick={() => changePlaybackRate(1.5)}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          1.5x
+        </button>
+        <button
+          onClick={() => changePlaybackRate(2)}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          2x
+        </button>
       </div>
     </div>
   );
-};
-
-const getYouTubeID = (url: string): string | null => {
-  const regExp =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
 };
 
 export default VideoPlayer;

@@ -19,7 +19,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const [played, setPlayed] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [volume, setVolume] = useState(0.8); // Initialize volume to 80%
+  const [volume, setVolume] = useState(0.8);
+  const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+  const [duration, setDuration] = useState(0);
   const { openModal } = useModal();
   const videoContainerRef = useRef<HTMLDivElement>(null);
   console.log("isFullScreen", isFullScreen);
@@ -49,6 +51,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   }, [isPlaying]);
 
   const togglePlayPause = () => {
+    console.log("HITTING");
     setIsPlaying(!isPlaying);
   };
 
@@ -76,10 +79,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   };
 
+  const handleDuration = (duration: number) => {
+    setDuration(duration);
+  };
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLInputElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    setHoveredTime(pos * duration);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredTime(null);
   };
 
   useEffect(() => {
@@ -119,7 +136,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   return (
     <div
       ref={videoContainerRef}
-      className={`video-player bg-black p-2 rounded-lg w-full max-w-video-vw h-video-vh box-border flex flex-col items-center ${
+      className={`video-player bg-black rounded-lg w-full max-w-video-vw h-video-vh box-border flex flex-col items-center ${
         isPlaying ? "is-playing" : ""
       }`}
     >
@@ -143,22 +160,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
         </defs>
       </svg>
       <div className="relative w-full h-full rounded-lg">
-        <ReactPlayer
-          ref={playerRef}
-          url={url}
-          playing={isPlaying}
-          controls={false}
-          playbackRate={playbackRate}
-          volume={volume} // Set volume on the player
-          width="100%"
-          height="100%"
-          className={`"w-full h-full pointer-events-none" ${
-            isFullScreen ? "" : "iframe-rounded"
-          }`}
-          onProgress={handleProgress}
-        />
+        <div className="w-full h-full" onClick={() => togglePlayPause()}>
+          <ReactPlayer
+            ref={playerRef}
+            url={url}
+            playing={isPlaying}
+            controls={false}
+            playbackRate={playbackRate}
+            volume={volume}
+            width="100%"
+            height="100%"
+            className={`w-full h-full cursor-pointer ${
+              !isFullScreen ? "iframe-rounded" : ""
+            }`}
+            onProgress={handleProgress}
+            onDuration={handleDuration}
+          />
+          <button
+            onClick={togglePlayPause}
+            className="absolute w-full h-full bottom-0 left-0"
+          ></button>
+        </div>
         <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
-
         <div className="flex flex-col w-full px-4 absolute bottom-0 left-0">
           <input
             type="range"
@@ -167,8 +190,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
             step="any"
             value={played}
             onChange={handleSeek}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             className="w-full mt-2 custom-range video-progress"
           />
+          {hoveredTime !== null && (
+            <div
+              className="absolute bg-white text-black text-xs p-1 rounded transform translate-y-[-30px]"
+              style={{
+                left: `${(hoveredTime / duration) * 100}%`,
+              }}
+            >
+              {formatTime(hoveredTime)}
+            </div>
+          )}
           <div
             className="absolute bg-white text-black text-xs p-1 rounded transform translate-y-[-18px] translate-x-[4px] bottom-[60px]"
             style={{
@@ -230,7 +265,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
                   fill="none"
                   stroke="currentColor"
                   strokeLinecap="round"
-                  strokeLinejoin="round"
                   strokeWidth="1.5"
                 >
                   <path

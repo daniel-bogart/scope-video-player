@@ -14,6 +14,9 @@ import heroReel from "../../videos/scopeReel.mp4";
 import logoIcon from "../../public/images/LOGO_ICON.png";
 import { getThumbnailUrl } from "../lib/getThumbNailUrl";
 import { truncateText } from "@/lib/charHelpers";
+import snowyMountain from "../../public/images/snowyMountain.jpg";
+import climbing from "../../public/images/climbing.jpg";
+import mountaineering from "../../public/images/mountaineering.jpg";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Video {
@@ -38,8 +41,10 @@ const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
       uniqueUrls.add(video.video_url);
       return true;
     });
-
-    return filteredVideos;
+    const sortedVideos = filteredVideos.sort((a: Video, b: Video) =>
+      a.id < b.id ? 1 : -1
+    );
+    return sortedVideos.slice(0, 6);
   } else {
     console.error("API response is not as expected:", data);
     return [];
@@ -48,6 +53,9 @@ const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
 
 const Home = () => {
   const heroWrapperRef = useRef<HTMLDivElement>(null);
+  const snowyRef = useRef<HTMLDivElement>(null);
+  const climbingRef = useRef<HTMLDivElement>(null);
+  const mountaineeringRef = useRef<HTMLDivElement>(null);
   const userId = "daniel_bogart";
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -68,8 +76,6 @@ const Home = () => {
 
   useEffect(() => {
     if (heroWrapperRef.current && videoList.length > 0) {
-      console.log("heroWrapperRef.current:", heroWrapperRef.current);
-
       gsap.fromTo(
         heroWrapperRef.current,
         { y: -600 },
@@ -84,13 +90,51 @@ const Home = () => {
         }
       );
 
+      gsap.fromTo(
+        snowyRef.current,
+        { y: -200 },
+        {
+          y: 0,
+          scrollTrigger: {
+            trigger: snowyRef.current,
+            scrub: true,
+            start: "top bottom",
+            end: "bottom top",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        climbingRef.current,
+        { y: -200 },
+        {
+          y: 0,
+          scrollTrigger: {
+            trigger: climbingRef.current,
+            scrub: true,
+            start: "top bottom",
+            end: "bottom top",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        mountaineeringRef.current,
+        { y: -200 },
+        {
+          y: 0,
+          scrollTrigger: {
+            trigger: mountaineeringRef.current,
+            scrub: true,
+            start: "top bottom",
+            end: "bottom top",
+          },
+        }
+      );
+
       return () => {
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       };
-    } else {
-      console.error(
-        "heroWrapperRef is not attached to any element or videoList is empty"
-      );
     }
   }, [videoList]);
 
@@ -167,6 +211,87 @@ const Home = () => {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+      <section className="flex flex-col items-center justify-center w-full">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
+          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem]">
+            Reaching New Summits
+          </h1>
+          <div className="flex gap-[2rem] w-full">
+            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+              LearnMore’s series on mountain exploration for outdoor enthusiasts
+              has garnered international acclaim for its groundbreaking approach
+              to capturing the essence of rock climbing and mountaineering. Our
+              series have been recognized for their exceptional cinematography,
+              immersive audio, and stunning special effects. At the prestigious
+              Outdoor Adventure Awards, our series have been celebrated for Best
+              Adventure Documentary and Best Technical Achievement.
+            </p>
+            <div className="overflow-hidden">
+              <div ref={mountaineeringRef} className="h-[470px]">
+                <Image
+                  width={1000}
+                  height={600}
+                  alt="mountaineering"
+                  src={mountaineering}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-col items-center justify-center w-full">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
+          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem] text-end self-end">
+            A Journey Like No Other
+          </h1>
+          <div className="flex gap-[2rem] w-full">
+            <div className="overflow-hidden">
+              <div ref={snowyRef} className="h-[470px]">
+                <Image
+                  width={1000}
+                  height={600}
+                  alt="Snowy Mountain"
+                  src={snowyMountain}
+                />
+              </div>
+            </div>
+            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+              Our team is the cornerstone of LearnMore's success. We deeply
+              value the dedication and passion that our team members bring to
+              every project. By fostering an environment of creativity, freedom
+              of expression, and inclusivity, we aim to bring out the best in
+              each member of our exceptional and committed team.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-col items-center justify-center w-full">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
+          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem]">
+            Explore. Learn. Achieve.
+          </h1>
+          <div className="flex gap-[2rem] w-full">
+            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+              At LearnMore, we believe in the power of education and adventure.
+              Our comprehensive library of educational videos covers everything
+              from beginner rock climbing techniques to advanced mountaineering
+              expeditions. Join us on a journey to discover the wonders of the
+              vertical world and equip yourself with the knowledge and skills to
+              reach new heights.
+            </p>
+            <div className="overflow-hidden">
+              <div ref={climbingRef} className="h-[470px]">
+                <Image
+                  width={1000}
+                  height={600}
+                  alt="Climbing"
+                  src={climbing}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

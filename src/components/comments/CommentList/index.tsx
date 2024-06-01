@@ -15,7 +15,7 @@ const CommentList: React.FC<CommentListProps> = React.memo(
       console.log("Comments prop updated:", comments.comments);
     }, [comments.comments]); // Depend on the nested comments array
 
-    if (loading) {
+    if (loading || comments.comments === undefined) {
       return <div className="text-white">Loading comments...</div>;
     }
 

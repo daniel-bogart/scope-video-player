@@ -215,86 +215,90 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
             )}
           </div>
           <div className="flex justify-between justify-center items-center box-border w-full flex-row h-[60px] mt-2">
-            <button
-              onClick={togglePlayPause}
-              className="bg-transparent text-white p-2 rounded"
-            >
-              <svg height="48px" width="48px">
-                <use className="play-icon" xlinkHref="#play-icon"></use>
-                <use className="pause-icon" xlinkHref="#pause-icon"></use>
-              </svg>
-            </button>
-            <button
-              onClick={rewindVideo}
-              className="group bg-transparent text-white p-2 rounded"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                className="stroke-current text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
+            <div className="flex justify-start items-center box-border w-full">
+              <button
+                onClick={togglePlayPause}
+                className="bg-transparent text-white p-2 rounded"
               >
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="1.5"
+                <svg height="48px" width="48px">
+                  <use className="play-icon" xlinkHref="#play-icon"></use>
+                  <use className="pause-icon" xlinkHref="#pause-icon"></use>
+                </svg>
+              </button>
+              <VolumeControl volume={volume} setVolume={setVolume} />
+              <button
+                onClick={rewindVideo}
+                className="group bg-transparent text-white p-2 rounded"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  className="stroke-current text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeWidth="1.5"
+                  >
+                    <path
+                      strokeLinejoin="round"
+                      d="M14 4.5L12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-4.1 2.468-7.625 6-9.168"
+                    />
+                    <path strokeLinejoin="round" d="m7.5 10.5l2.5-2v7" />
+                    <path d="M12.5 13.75v-3.5a1.75 1.75 0 1 1 3.5 0v3.5a1.75 1.75 0 1 1-3.5 0Z" />
+                  </g>
+                </svg>
+              </button>
+              <button
+                onClick={ffVideo}
+                className="group bg-transparent text-white p-2 rounded"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  className="stroke-current text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeWidth="1.5"
+                  >
+                    <path
+                      strokeLinejoin="round"
+                      d="M10 4.5L12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10c0-4.1-2.468-7.625-6-9.168"
+                    />
+                    <path strokeLinejoin="round" d="m7.5 10.5l2.5-2v7" />
+                    <path d="M12.5 13.75v-3.5a1.75 1.75 0 1 1 3.5 0v3.5a1.75 1.75 0 1 1-3.5 0Z" />
+                  </g>
+                </svg>
+              </button>
+            </div>
+            <div className="flex justify-end items-center box-border w-full">
+              <PlaySpeed
+                playbackRate={playbackRate}
+                setPlaybackRate={setPlaybackRate}
+              />
+              <button onClick={toggleFullScreen} className="group">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
                 >
                   <path
-                    strokeLinejoin="round"
-                    d="M14 4.5L12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-4.1 2.468-7.625 6-9.168"
+                    fill="currentColor"
+                    d="M3 21v-5h2v3h3v2zm13 0v-2h3v-3h2v5zM3 8V3h5v2H5v3zm16 0V5h-3V3h5v5z"
                   />
-                  <path strokeLinejoin="round" d="m7.5 10.5l2.5-2v7" />
-                  <path d="M12.5 13.75v-3.5a1.75 1.75 0 1 1 3.5 0v3.5a1.75 1.75 0 1 1-3.5 0Z" />
-                </g>
-              </svg>
-            </button>
-            <button
-              onClick={ffVideo}
-              className="group bg-transparent text-white p-2 rounded"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                className="stroke-current text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
-              >
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="1.5"
-                >
-                  <path
-                    strokeLinejoin="round"
-                    d="M10 4.5L12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10c0-4.1-2.468-7.625-6-9.168"
-                  />
-                  <path strokeLinejoin="round" d="m7.5 10.5l2.5-2v7" />
-                  <path d="M12.5 13.75v-3.5a1.75 1.75 0 1 1 3.5 0v3.5a1.75 1.75 0 1 1-3.5 0Z" />
-                </g>
-              </svg>
-            </button>
-            <VolumeControl volume={volume} setVolume={setVolume} />
-            <PlaySpeed
-              playbackRate={playbackRate}
-              setPlaybackRate={setPlaybackRate}
-            />
-            <button onClick={toggleFullScreen} className="group">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
-              >
-                <path
-                  fill="currentColor"
-                  d="M3 21v-5h2v3h3v2zm13 0v-2h3v-3h2v5zM3 8V3h5v2H5v3zm16 0V5h-3V3h5v5z"
-                />
-              </svg>
-            </button>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

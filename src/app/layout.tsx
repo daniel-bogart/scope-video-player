@@ -32,7 +32,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const headerRef = useRef<HTMLElement>(null);
   const floatingButtonRef = useRef<HTMLDivElement>(null);
 
-  const isTablet = useCheckScreenSize(1200);
+  const isTablet = useCheckScreenSize(1280);
 
   useEffect(() => {
     const lenis = new Lenis({

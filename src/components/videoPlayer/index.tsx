@@ -134,7 +134,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   return (
     <div
       ref={videoContainerRef}
-      className={`video-player bg-black rounded-lg w-full max-w-video-vw h-video-vh box-border flex flex-col items-center ${
+      className={`video-player bg-black rounded-lg w-full max-w-video-vw md:h-video-vh box-border flex flex-col items-center max-h-[652px] h-[50vh] ${
         isPlaying ? "is-playing" : ""
       }`}
     >

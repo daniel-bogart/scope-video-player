@@ -57,6 +57,10 @@ html {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
   background-color: #222;
+
+  div {
+    box-sizing: border-box;
+  }
 }
 
 @layer utilities {
@@ -201,5 +205,12 @@ input[type="range"].video-progress:focus::-ms-fill-upper {
 
   .button-anim {
     transform: translateY(0), scale(2);
+  }
+
+  .video-styles {
+    video {
+      max-width: unset;
+      width: unset;
+    }
   }
 }

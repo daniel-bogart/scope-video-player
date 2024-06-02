@@ -89,7 +89,7 @@ const VideoPage = ({ params }: VideoPageProps) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full box-border">
-      <div className="flex flex-col items-center justify-center w-full max-w-video-vw w-full py-20 box-border">
+      <div className="flex flex-col items-center justify-center w-full max-w-video-vw w-full py-20 box-border md:px-10 px-5">
         <VideoPlayer url={video.video_url} />
         <div className="w-full py-10">
           <h1 className="text-2xl font-bold mb-4 text-white">{video.title}</h1>
@@ -102,7 +102,6 @@ const VideoPage = ({ params }: VideoPageProps) => {
             comments={{ comments: (comments as any).comments }}
             loading={loadingComments}
           />
-
         </div>
       </div>
     </div>

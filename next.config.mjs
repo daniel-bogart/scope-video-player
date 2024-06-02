@@ -3,11 +3,10 @@ import { withNextVideo } from "next-video/process";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["img.youtube.com"],
+    remotePatterns: [{ protocol: "https", hostname: "img.youtube.com" }],
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      console.log("Applying file-loader for video files");
       config.module.rules.push({
         test: /\.(mp4|webm|ogg|swf|ogv)$/,
         use: [

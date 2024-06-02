@@ -32,7 +32,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const headerRef = useRef<HTMLElement>(null);
   const floatingButtonRef = useRef<HTMLDivElement>(null);
 
-  const isTablet = useCheckScreenSize(1200);
+  const isTablet = useCheckScreenSize(1280);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -116,7 +116,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
               <Header ref={headerRef} />
               <div
                 className={classNames(
-                  "relative bg-black w-full transition-all duration-300 ease-out after:z-40 after:content-[''] after:absolute after:bg-[rgba(0,0,0,0.5)] after:w-full after:top-0 after:h-full after:left-0 after:transition-all after:duration-300 after:ease-out after:pointer-events-none",
+                  "relative bg-black w-full transition-all duration-300 ease-out after:z-40 after:content-[''] after:absolute after:bg-[rgba(0,0,0,0.5)] after:w-full after:top-0 after:h-full after:left-0 after:transition-all after:duration-300 after:ease-out after:pointer-events-none min-h-screen",
                   {
                     "after:opacity-1": menuActive,
                     "after:opacity-0": !menuActive,

@@ -9,7 +9,7 @@ import Image from "next/image";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setVideos } from "../features/videoSlice";
 import { RootState, AppDispatch } from "../store/store";
-import NextVideo from "next-video";
+import BackgroundVideo from "next-video/background-video";
 import heroReel from "../../videos/scopeReel.mp4";
 import logoIcon from "../../public/images/LOGO_ICON.png";
 import { getThumbnailUrl } from "../lib/getThumbNailUrl";
@@ -18,6 +18,8 @@ import Link from "next/link";
 import snowyMountain from "../../public/images/snowyMountain.jpg";
 import climbing from "../../public/images/climbing.jpg";
 import mountaineering from "../../public/images/mountaineering.jpg";
+import { useCheckScreenSize } from "@/lib/checkScreenSize";
+import CTA from "../components/button";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Video {
@@ -28,30 +30,6 @@ interface Video {
   user_id: string;
 }
 
-const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
-  const { data } = await axios.get(
-    `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
-  );
-
-  if (data && Array.isArray(data.videos)) {
-    const uniqueUrls = new Set<string>();
-    const filteredVideos = data.videos.filter((video: Video) => {
-      if (video.video_url.includes("blob") || uniqueUrls.has(video.video_url)) {
-        return false;
-      }
-      uniqueUrls.add(video.video_url);
-      return true;
-    });
-    const sortedVideos = filteredVideos.sort((a: Video, b: Video) =>
-      a.id < b.id ? 1 : -1
-    );
-    return sortedVideos.slice(0, 6);
-  } else {
-    console.error("API response is not as expected:", data);
-    return [];
-  }
-};
-
 const Home = () => {
   const heroWrapperRef = useRef<HTMLDivElement>(null);
   const snowyRef = useRef<HTMLDivElement>(null);
@@ -59,6 +37,36 @@ const Home = () => {
   const mountaineeringRef = useRef<HTMLDivElement>(null);
   const userId = "daniel_bogart";
   const dispatch = useDispatch<AppDispatch>();
+  const isMobile = useCheckScreenSize(768);
+
+  const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
+    const { data } = await axios.get(
+      `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
+    );
+
+    const recentVideoNumber = isMobile ? 2 : 6;
+
+    if (data && Array.isArray(data.videos)) {
+      const uniqueUrls = new Set<string>();
+      const filteredVideos = data.videos.filter((video: Video) => {
+        if (
+          video.video_url.includes("blob") ||
+          uniqueUrls.has(video.video_url)
+        ) {
+          return false;
+        }
+        uniqueUrls.add(video.video_url);
+        return true;
+      });
+      const sortedVideos = filteredVideos.sort((a: Video, b: Video) =>
+        a.id < b.id ? 1 : -1
+      );
+      return sortedVideos.slice(0, recentVideoNumber);
+    } else {
+      console.error("API response is not as expected:", data);
+      return [];
+    }
+  };
   const {
     data: videos,
     error,
@@ -76,6 +84,7 @@ const Home = () => {
   }, [videos, dispatch]);
 
   useEffect(() => {
+    const yShift = isMobile ? -100 : -200;
     if (heroWrapperRef.current && videoList.length > 0) {
       gsap.fromTo(
         heroWrapperRef.current,
@@ -93,7 +102,7 @@ const Home = () => {
 
       gsap.fromTo(
         snowyRef.current,
-        { y: -200 },
+        { y: yShift },
         {
           y: 0,
           scrollTrigger: {
@@ -107,7 +116,7 @@ const Home = () => {
 
       gsap.fromTo(
         climbingRef.current,
-        { y: -200 },
+        { y: yShift },
         {
           y: 0,
           scrollTrigger: {
@@ -121,7 +130,7 @@ const Home = () => {
 
       gsap.fromTo(
         mountaineeringRef.current,
-        { y: -200 },
+        { y: yShift },
         {
           y: 0,
           scrollTrigger: {
@@ -150,38 +159,50 @@ const Home = () => {
   return (
     <div className="w-full flex flex-col items-start justify-start overflow-hidden bg-black">
       <section className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-start justify-start bg-black">
-        <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30">
-          <Image
-            src={logoIcon}
-            alt="EdTech Logo Hero"
-            width={100}
-            height={100}
-          />
-          <h2 className="text-4xl font-semibold mix-blend-difference text-white">
-            Scroll to explore
+        <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30 gap-10 px-5">
+          <div className="flex flex-col items-center justify-center gap-10">
+            <h1 className="xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl font- mix-blend-difference text-white text-center max-w-screen-xl">
+              Your gateway to mastering new skills and embarking on breathtaking
+              journeys.
+            </h1>
+            <div className="flex sm:flex-row flex-col items-center justify-center gap-8">
+              <CTA to="/create">Upload</CTA>
+              <CTA theme="orange" to="/create">
+                Browse all
+              </CTA>
+            </div>
+          </div>
+          <h2 className="text-2xl font-semibold mix-blend-difference text-white">
+            or
           </h2>
+          <div className="flex flex-col items-center justify-center">
+            <Image
+              src={logoIcon}
+              alt="EdTech Logo Hero"
+              width={100}
+              height={100}
+            />
+            <h2 className="text-3xl font-semibold mix-blend-difference text-white">
+              Scroll to explore
+            </h2>
+          </div>
         </div>
         <div
           ref={heroWrapperRef}
-          className="brightness-80 rounded-custom hero-wrapper h-[120vh] flex items-start justify-start w-full"
+          className="brightness-70 rounded-custom hero-wrapper h-[120vh] flex items-start justify-start w-full"
         >
-          <NextVideo
-            className="rounded-custom h-[120vh] w-full object-cover object-center"
-            autoPlay
-            muted
-            loop
-            playsInline
-            controls={false}
+          <BackgroundVideo
+            className="rounded-custom h-[120vh] w-full object-cover object-center min-h-full video-styles"
             src={heroReel}
           />
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
-          <h1 className="text-9xl font-light mb-4 text-white pb-10">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center xl:py-32 md:px-10 px-5 py-16">
+          <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl xl:pb-10 lg:pb-8 sm:pb-4 font-light mb-4 text-white ">
             Featured Videos
           </h1>
-          <ul className="grid grid-cols-3 gap-2 w-full">
+          <ul className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 w-full">
             {videoList.map((video: Video) => (
               <li
                 key={video.id}
@@ -197,7 +218,7 @@ const Home = () => {
                       alt={`${video.title} thumbnail`}
                       width={564}
                       height={317}
-                      className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out"
+                      className="rounded-lg transform group-hover:scale-105 transition-all duration-300 ease-out group-hover:rotate-1"
                     />
                   </div>
                   <Image
@@ -210,22 +231,25 @@ const Home = () => {
                     <span className="absolute left-0 block h-[2px] w-0 bg-white transform transition-all duration-300 ease-out group-hover:w-full"></span>
                     <span className="w-full h-[1px] brightness-50 absolute bg-white" />
                   </div>
-                  <h2 className="text-lg mb-2 text-white font-light">
+                  <p className="md:text-lg text-md mb-2 text-white font-light">
                     {truncateText(video.title, 50)}
-                  </h2>
+                  </p>
                 </Link>
               </li>
             ))}
           </ul>
+          <div className="w-full flex items-center md:justify-center pt-10 justify-start">
+            <CTA to="/videos">View more</CTA>
+          </div>
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
-          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem]">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center xl:py-32 md:px-10 px-5 sm:py-16 py-10">
+          <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl font-light mb-4 text-white xl:pb-10 lg:pb-8 sm:pb-4 max-w-[57rem]">
             Reaching New Summits
           </h1>
-          <div className="flex gap-[2rem] w-full">
-            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+          <div className="flex lg:flex-row flex-col gap-[2rem] w-full">
+            <p className="md:text-md text-sm mb-2 text-white font-extralight max-w-xl leading-relaxed">
               LearnMore’s series on mountain exploration for outdoor enthusiasts
               has garnered international acclaim for its groundbreaking approach
               to capturing the essence of rock climbing and mountaineering. Our
@@ -235,7 +259,10 @@ const Home = () => {
               Adventure Documentary and Best Technical Achievement.
             </p>
             <div className="overflow-hidden">
-              <div ref={mountaineeringRef} className="h-[470px]">
+              <div
+                ref={mountaineeringRef}
+                className="md:h-[470px]"
+              >
                 <Image
                   width={1000}
                   height={600}
@@ -248,13 +275,16 @@ const Home = () => {
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
-          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem] text-end self-end">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center xl:py-32 md:px-10 px-5 sm:py-16 py-10">
+          <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl font-light mb-4 text-white xl:pb-10 lg:pb-8 sm:pb-4 max-w-[57rem] text-end self-end">
             A Journey Like No Other
           </h1>
-          <div className="flex gap-[2rem] w-full">
+          <div className="flex lg:flex-row flex-col-reverse gap-[2rem] w-full">
             <div className="overflow-hidden">
-              <div ref={snowyRef} className="h-[470px]">
+              <div
+                ref={snowyRef}
+                className="md:h-[470px]"
+              >
                 <Image
                   width={1000}
                   height={600}
@@ -263,7 +293,7 @@ const Home = () => {
                 />
               </div>
             </div>
-            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+            <p className="md:text-md text-sm mb-2 text-white font-extralight max-w-xl leading-relaxed">
               Our team is the cornerstone of LearnMore's success. We deeply
               value the dedication and passion that our team members bring to
               every project. By fostering an environment of creativity, freedom
@@ -274,12 +304,12 @@ const Home = () => {
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center py-32 px-10">
-          <h1 className="text-9xl font-light mb-4 text-white pb-10 max-w-[57rem]">
+        <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center xl:py-32 md:px-10 px-5 sm:py-16 py-10">
+          <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl font-light mb-4 text-white xl:pb-10 lg:pb-8 sm:pb-4 max-w-[57rem]">
             Explore. Learn. Achieve.
           </h1>
-          <div className="flex gap-[2rem] w-full">
-            <p className="text-md mb-2 text-white font-extralight max-w-xl leading-relaxed">
+          <div className="flex lg:flex-row flex-col gap-[2rem] w-full">
+            <p className="md:text-md text-sm mb-2 text-white font-extralight max-w-xl leading-relaxed">
               At LearnMore, we believe in the power of education and adventure.
               Our comprehensive library of educational videos covers everything
               from beginner rock climbing techniques to advanced mountaineering
@@ -288,7 +318,10 @@ const Home = () => {
               reach new heights.
             </p>
             <div className="overflow-hidden">
-              <div ref={climbingRef} className="h-[470px]">
+              <div
+                ref={climbingRef}
+                className="md:h-[470px]"
+              >
                 <Image
                   width={1000}
                   height={600}

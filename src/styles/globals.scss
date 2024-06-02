@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -28,9 +28,21 @@ body {
   background-color: #222;
   overflow-x: hidden;
 
-  h1,h2,h3,h4,h5,h6,p {
-    font-family: 'Montserrat', sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    font-family: "Montserrat", sans-serif;
   }
+
+  --white: #e9e9e9;
+  --black: #222;
+  --orange: #ebad30;
+  --blue: #50c7e3;
+  --mint: #48b595;
 
   & > div {
     height: 100%;
@@ -45,6 +57,10 @@ html {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
   background-color: #222;
+
+  div {
+    box-sizing: border-box;
+  }
 }
 
 @layer utilities {
@@ -71,4 +87,130 @@ html.lenis {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
+}
+
+input[type="range"].video-progress {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="range"].video-progress::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    #50c7e3 var(--progress),
+    rgba(255, 255, 255, 0.4) var(--progress)
+  );
+  border-radius: 8px;
+  transition: 0.1s all ease-out;
+}
+
+input[type="range"].video-progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px; /* This centers the thumb vertically */
+  background: #50c7e3;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  opacity: 0;
+}
+
+input[type="range"].video-progress::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(
+    to right,
+    #50c7e3 var(--progress),
+    rgba(255, 255, 255, 0.4) var(--progress)
+  );
+  border-radius: 8px;
+}
+
+input[type="range"].video-progress::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #50c7e3;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+input[type="range"].video-progress::-ms-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type="range"].video-progress::-ms-fill-lower {
+  background: #50c7e3;
+  border-radius: 8px;
+}
+
+input[type="range"].video-progress::-ms-fill-upper {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+}
+
+input[type="range"].video-progress::-ms-thumb {
+  width: 16px;
+  height: 16px;
+  background: #50c7e3;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+input[type="range"].video-progress:focus::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #50c7e3 var(--progress),
+    rgba(255, 255, 255, 0.5) var(--progress)
+  );
+}
+
+input[type="range"].video-progress:focus::-moz-range-track {
+  background: linear-gradient(
+    to right,
+    #50c7e3 var(--progress),
+    rgba(255, 255, 255, 0.5) var(--progress)
+  );
+}
+
+input[type="range"].video-progress:focus::-ms-fill-lower {
+  background: #50c7e3;
+}
+
+input[type="range"].video-progress:focus::-ms-fill-upper {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+@layer utilities {
+  .transition-anim {
+    transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+      width 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+      height 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+      border-radius 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+      top 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+      right 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  }
+
+  .button-anim {
+    transform: translateY(0), scale(2);
+  }
+
+  .video-styles {
+    video {
+      max-width: unset;
+      width: unset;
+    }
+  }
 }

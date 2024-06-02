@@ -59,7 +59,7 @@ const Header = forwardRef<HTMLElement, {}>((_, ref) => {
                 />
               </div>
             )}
-            <div className="flex items-center justify-between gap-8">
+            <div className="items-center justify-between gap-8 hidden xl:flex">
               {navLinks.map((item) => {
                 const { title, url } = item;
                 return (

@@ -13,10 +13,19 @@ const config: Config = {
         black: "#222",
         grey: "#bbb",
         white: "#e9e9e9",
+        orange: "#ebad30",
+        blue: "#50c7e3",
         flash: "#444",
+        mint: "#48b595",
       },
       borderRadius: {
         custom: "32px",
+      },
+      transitionDelay: {
+        "800": "800ms",
+      },
+      transitionDuration: {
+        "450": "0.45s",
       },
       maxHeight: {
         "0": "0",
@@ -32,6 +41,7 @@ const config: Config = {
       },
       brightness: {
         25: ".25",
+        70: ".7",
         80: ".8",
         175: "1.75",
       },
@@ -58,7 +68,6 @@ const config: Config = {
         },
       });
     },
-    
   ],
 };
 

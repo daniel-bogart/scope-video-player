@@ -49,12 +49,11 @@ const CreateVideo: React.FC = () => {
       );
       dispatch(createVideo(video));
       alert("Video created successfully");
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
-    <form onSubmit={handleSubmit} className="pt-[100px] max-w-2xl mx-auto p-4">
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create New Video</h1>
       <input
         type="text"

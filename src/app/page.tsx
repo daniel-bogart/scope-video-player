@@ -18,6 +18,7 @@ import Link from "next/link";
 import snowyMountain from "../../public/images/snowyMountain.jpg";
 import climbing from "../../public/images/climbing.jpg";
 import mountaineering from "../../public/images/mountaineering.jpg";
+import CTA from "../components/button";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Video {
@@ -150,20 +151,37 @@ const Home = () => {
   return (
     <div className="w-full flex flex-col items-start justify-start overflow-hidden bg-black">
       <section className="relative flex w-full h-[110vh] overflow-hidden rounded-custom items-start justify-start bg-black">
-        <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30">
-          <Image
-            src={logoIcon}
-            alt="EdTech Logo Hero"
-            width={100}
-            height={100}
-          />
-          <h2 className="text-4xl font-semibold mix-blend-difference text-white">
-            Scroll to explore
+        <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30 gap-10">
+          <div className="flex flex-col items-center justify-center gap-10">
+            <h1 className="text-7xl font- mix-blend-difference text-white text-center max-w-screen-xl">
+              Your gateway to mastering new skills and embarking on breathtaking
+              journeys.
+            </h1>
+            <div className="flex items-center justify-center gap-8">
+              <CTA to="/create">Upload</CTA>
+              <CTA theme="orange" to="/create">
+                Browse all
+              </CTA>
+            </div>
+          </div>
+          <h2 className="text-2xl font-semibold mix-blend-difference text-white">
+            or
           </h2>
+          <div className="flex flex-col items-center justify-center">
+            <Image
+              src={logoIcon}
+              alt="EdTech Logo Hero"
+              width={100}
+              height={100}
+            />
+            <h2 className="text-3xl font-semibold mix-blend-difference text-white">
+              Scroll to explore
+            </h2>
+          </div>
         </div>
         <div
           ref={heroWrapperRef}
-          className="brightness-80 rounded-custom hero-wrapper h-[120vh] flex items-start justify-start w-full"
+          className="brightness-70 rounded-custom hero-wrapper h-[120vh] flex items-start justify-start w-full"
         >
           <NextVideo
             className="rounded-custom h-[120vh] w-full object-cover object-center"

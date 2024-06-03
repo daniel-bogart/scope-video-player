@@ -12,6 +12,7 @@ import alpine from "../../../public/images/alpine.jpg";
 import CTA from "../../components/button";
 import axios from "axios";
 
+// Define the structure for the video input data
 interface VideoInput {
   user_id: string;
   title: string;
@@ -19,7 +20,9 @@ interface VideoInput {
   video_url: string;
 }
 
+// Functional component for creating a new video
 const CreateVideo: React.FC = () => {
+  // State variables for form inputs and error handling
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -27,18 +30,23 @@ const CreateVideo: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { openModal } = useModal();
 
+  // Handle changes in the video URL input field
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVideoUrl(e.target.value);
   };
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // Check if video URL is provided
     if (!videoUrl) {
       setError("Please provide a video URL.");
       return;
     }
 
+    // Validate if the URL is from YouTube or Vimeo
     const isYoutubeOrVimeo = (url: string) => {
       const youtubePattern =
         /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
@@ -51,6 +59,7 @@ const CreateVideo: React.FC = () => {
       return;
     }
 
+    // Check if the URL is accessible and valid
     const isUrlValid = await isValidVideoUrl(videoUrl);
 
     if (!isUrlValid) {
@@ -58,6 +67,7 @@ const CreateVideo: React.FC = () => {
       return;
     }
 
+    // Construct the video object to be sent to the server
     const video: VideoInput = {
       user_id: "daniel_bogart",
       title,
@@ -66,6 +76,7 @@ const CreateVideo: React.FC = () => {
     };
 
     try {
+      // Make an API call to create a new video
       await axios.post(
         "https://take-home-assessment-423502.uc.r.appspot.com/videos",
         video,
@@ -75,8 +86,11 @@ const CreateVideo: React.FC = () => {
           },
         }
       );
+      // Dispatch the action to update the Redux store
       dispatch(createVideo(video));
+      // Open success modal
       openModal(<Success />);
+      // Reset form fields
       setTitle("");
       setDescription("");
       setVideoUrl("");
@@ -87,13 +101,15 @@ const CreateVideo: React.FC = () => {
   };
 
   return (
-    <div className="relative h-[100vh] flex flex-col items-center w-ful justify-center">
+    <div className="relative h-[100vh] flex flex-col items-center w-full justify-center">
       <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30 gap-10 px-5">
         <form
           onSubmit={handleSubmit}
           className="max-w-2xl mx-auto p-4 bg-black max-w-screen-sm w-full rounded-lg"
         >
-          <h1 className="text-2xl text-white font-bold mb-4">Create New Video</h1>
+          <h1 className="text-2xl text-white font-bold mb-4">
+            Create New Video
+          </h1>
           {error && <div className="text-red-500 mb-2">{error}</div>}
           <input
             type="text"
@@ -111,7 +127,9 @@ const CreateVideo: React.FC = () => {
             className="w-full mb-2 p-2 border-2 rounded bg-black text-white"
           />
           <div className="mb-4 bg-transparent">
-            <label className="text-white block mb-1">Enter Video URL from Youtube or Vimeo:</label>
+            <label className="text-white block mb-1">
+              Enter Video URL from Youtube or Vimeo:
+            </label>
             <input
               type="url"
               placeholder="https://youtube.com/video-id"
@@ -121,12 +139,16 @@ const CreateVideo: React.FC = () => {
               required
             />
           </div>
-          <CTA type="submit">
-            Create Video
-          </CTA>
+          <CTA type="submit">Create Video</CTA>
         </form>
       </div>
-      <Image src={alpine} alt="alpine" layout="fill" objectFit="cover" className="brightness-70"/>
+      <Image
+        src={alpine}
+        alt="alpine"
+        layout="fill"
+        objectFit="cover"
+        className="brightness-70"
+      />
     </div>
   );
 };

@@ -11,10 +11,12 @@ import { CommentList, CommentForm } from "../../../components/comments";
 import { Video } from "../../../types/Video";
 import Description from "../../../components/description";
 
+// Define the properties for the VideoPage component
 interface VideoPageProps {
   params: { id: string };
 }
 
+// Function to fetch video data by ID
 const fetchVideo = async (id: string): Promise<Video | null> => {
   try {
     const response = await axios.get(
@@ -30,10 +32,12 @@ const fetchVideo = async (id: string): Promise<Video | null> => {
   }
 };
 
+// Dynamic import for the VideoPlayer component to disable server-side rendering
 const VideoPlayer = dynamic(() => import("../../../components/videoPlayer"), {
   ssr: false,
 });
 
+// Main component for the video page
 const VideoPage = ({ params }: VideoPageProps) => {
   const videoId = params.id;
   const [video, setVideo] = useState<Video | null>(null);
@@ -41,16 +45,18 @@ const VideoPage = ({ params }: VideoPageProps) => {
   const [loadingComments, setLoadingComments] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
 
+  // Selector to retrieve comments from the Redux store
   const comments = useSelector(
     (state: RootState) => state.comments.list[videoId] || []
   );
 
+  // Effect to load video data and comments when the component mounts or videoId changes
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       const videoData = await fetchVideo(videoId);
       if (!videoData) {
-        notFound();
+        notFound(); // Navigate to 404 page if video not found
         setLoading(false);
         return;
       }
@@ -62,20 +68,23 @@ const VideoPage = ({ params }: VideoPageProps) => {
     loadData();
   }, [dispatch, videoId]);
 
+  // Handle the addition of a new comment
   const handleAddComment = async (content: string, userId: string) => {
     await dispatch(createComment({ videoId, content, userId }));
     await dispatch(fetchComments(videoId)); // Refresh comments
   };
 
+  // Display loading state
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Display message if video is not found
   if (!video) {
     return <div>Video not found</div>;
   }
 
-
+  // Render the video page content
   return (
     <div className="flex flex-col items-center justify-center w-full box-border">
       <div className="flex flex-col items-center justify-center w-full max-w-video-vw w-full py-20 box-border md:px-10 px-5">

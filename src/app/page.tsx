@@ -22,6 +22,7 @@ import { useCheckScreenSize } from "@/lib/checkScreenSize";
 import CTA from "../components/button";
 gsap.registerPlugin(ScrollTrigger);
 
+// Define the structure of video objects used throughout the component.
 interface Video {
   id: string;
   title: string;
@@ -31,20 +32,24 @@ interface Video {
 }
 
 const Home = () => {
+  // Refs for managing GSAP animations on scroll.
   const heroWrapperRef = useRef<HTMLDivElement>(null);
   const snowyRef = useRef<HTMLDivElement>(null);
   const climbingRef = useRef<HTMLDivElement>(null);
   const mountaineeringRef = useRef<HTMLDivElement>(null);
-  const userId = "daniel_bogart";
+
+  // Redux and custom hook to manage state and screen size responsiveness.
   const dispatch = useDispatch<AppDispatch>();
+  const userId = "daniel_bogart";
   const isMobile = useCheckScreenSize(768);
 
+  // Fetch videos from a remote source based on the user ID and adjust count based on screen size.
   const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
     const { data } = await axios.get(
       `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
     );
 
-    const recentVideoNumber = isMobile ? 2 : 6;
+    const recentVideoNumber = isMobile ? 2 : 6; // Adjust the number of videos fetched based on the screen size.
 
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
@@ -79,14 +84,17 @@ const Home = () => {
 
   const videoList = useSelector((state: RootState) => state.videos.list);
 
+  // Store videos in Redux store upon fetching.
   useEffect(() => {
     if (videos) {
       dispatch(setVideos(videos));
     }
   }, [videos, dispatch]);
 
+  // Initialize GSAP animations on mount.
   useEffect(() => {
-    const yShift = isMobile ? -100 : -200;
+    const yShift = isMobile ? -100 : -200; // Set vertical shift for the animation based on the screen size.
+    // Initialize GSAP animations for various sections with ScrollTrigger for a dynamic effect on scroll.
     if (heroWrapperRef.current && videoList.length > 0) {
       gsap.fromTo(
         heroWrapperRef.current,
@@ -145,19 +153,21 @@ const Home = () => {
       );
 
       return () => {
+        // Cleanup GSAP scroll triggers when the component unmounts.
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       };
     }
   }, [videoList]);
 
-  if (isLoading) return (
-    <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
-      <span className="sr-only">Loading...</span>
-      <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-      <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-      <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
-    </div>
-  );
+  if (isLoading)
+    return (
+      <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
+        <span className="sr-only">Loading...</span>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+      </div>
+    );
 
   return (
     <div className="w-full flex flex-col items-start justify-start overflow-hidden bg-black">
@@ -262,10 +272,7 @@ const Home = () => {
               Adventure Documentary and Best Technical Achievement.
             </p>
             <div className="overflow-hidden">
-              <div
-                ref={mountaineeringRef}
-                className="md:h-[470px]"
-              >
+              <div ref={mountaineeringRef} className="md:h-[470px]">
                 <Image
                   width={1000}
                   height={600}
@@ -284,10 +291,7 @@ const Home = () => {
           </h1>
           <div className="flex lg:flex-row flex-col-reverse gap-[2rem] w-full">
             <div className="overflow-hidden">
-              <div
-                ref={snowyRef}
-                className="md:h-[470px]"
-              >
+              <div ref={snowyRef} className="md:h-[470px]">
                 <Image
                   width={1000}
                   height={600}
@@ -321,10 +325,7 @@ const Home = () => {
               reach new heights.
             </p>
             <div className="overflow-hidden">
-              <div
-                ref={climbingRef}
-                className="md:h-[470px]"
-              >
+              <div ref={climbingRef} className="md:h-[470px]">
                 <Image
                   width={1000}
                   height={600}

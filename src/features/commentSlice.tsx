@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store/store";
 
+// Define the structure of a Comment object
 interface Comment {
   id: string;
   content: string;
@@ -10,14 +11,17 @@ interface Comment {
   created_at: string;
 }
 
+// Define the structure of the comments state in the Redux store
 interface CommentsState {
   list: Record<string, Comment[]>;
 }
 
+// Initial state for the comments slice
 const initialState: CommentsState = {
   list: {},
 };
 
+// Async thunk to fetch comments for a specific video
 export const fetchComments = createAsyncThunk<
   Comment[],
   string,
@@ -34,6 +38,7 @@ export const fetchComments = createAsyncThunk<
   }
 });
 
+// Async thunk to create a new comment
 export const createComment = createAsyncThunk<
   Comment,
   { videoId: string; content: string; userId: string },
@@ -58,10 +63,12 @@ export const createComment = createAsyncThunk<
   }
 );
 
+// Create a slice for comments with initial state and reducers
 const commentSlice = createSlice({
   name: "comments",
   initialState,
   reducers: {
+    // Reducer to set the list of comments for a specific video
     setComments: (
       state,
       action: PayloadAction<{ videoId: string; comments: Comment[] }>
@@ -71,6 +78,7 @@ const commentSlice = createSlice({
         [action.payload.videoId]: action.payload.comments,
       };
     },
+    // Reducer to add a single comment to the list of a specific video
     addComment: (
       state,
       action: PayloadAction<{ videoId: string; comment: Comment }>
@@ -82,15 +90,18 @@ const commentSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Handle fulfilled state of fetchComments thunk
     builder
       .addCase(fetchComments.fulfilled, (state, action) => {
         const videoId = action.meta.arg;
         state.list[videoId] = action.payload || [];
       })
+      // Handle rejected state of fetchComments thunk
       .addCase(fetchComments.rejected, (state, action) => {
         const videoId = action.meta.arg;
         state.list[videoId] = [];
       })
+      // Handle fulfilled state of createComment thunk
       .addCase(createComment.fulfilled, (state, action) => {
         const { video_id: videoId } = action.payload;
         if (!Array.isArray(state.list[videoId])) {
@@ -101,5 +112,8 @@ const commentSlice = createSlice({
   },
 });
 
+// Export actions generated from the slice
 export const { setComments, addComment } = commentSlice.actions;
+
+// Export the comments slice reducer
 export default commentSlice.reducer;

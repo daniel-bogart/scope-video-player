@@ -44,6 +44,7 @@ Hello! Thank you for taking the time to have a look at my project! This project 
 - **Styling**: TailwindCSS and SCSS for modular and maintainable CSS.
 - **Animations**: GSAP (GreenSock Animation Platform) for smooth, light-weight, and high-performance animations.
 - **State Management**: Redux used for managing application state across components.
+- **Next-Video**: The hero reel is dynamically uploaded to Mux for efficient encoding, storing, and delivery for production (Unfortnately it is often known to cause an annoying error/bug in development 🥴 - but it's worth using).
 
 ## Setup and Installation
 

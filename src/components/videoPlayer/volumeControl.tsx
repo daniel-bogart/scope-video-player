@@ -1,37 +1,41 @@
 import React, { useState } from "react";
 
+// Define the props for the VolumeControl component
 interface VolumeControlProps {
-  volume: number;
-  setVolume: (volume: number) => void;
+  volume: number; // Current volume level
+  setVolume: (volume: number) => void; // Function to update the volume level
 }
 
 const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(false); // State to track if the volume is muted
 
+  // Handle the change in volume input
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVolume(parseFloat(e.target.value));
-    setIsMuted(e.target.value === "0");
+    setVolume(parseFloat(e.target.value)); // Update the volume
+    setIsMuted(e.target.value === "0"); // Set the muted state based on the volume
   };
 
+  // Toggle mute/unmute
   const toggleMute = () => {
-    setIsMuted(!isMuted);
-    setVolume(isMuted ? 0.8 : 0);
+    setIsMuted(!isMuted); // Toggle the muted state
+    setVolume(isMuted ? 0.8 : 0); // Set volume to 0.8 when unmuting, or 0 when muting
   };
 
   return (
     <div className="group flex items-center space-x-2 group relative max-w-[160px] w-full">
+      {/* Button to toggle mute/unmute */}
       <button
         onClick={toggleMute}
         className="text-white p-2 rounded focus:outline-none"
       >
+        {/* Render the appropriate icon based on the muted state */}
         {isMuted ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="36"
             height="36"
             viewBox="0 0 24 24"
-            className="text-neutral-300 group-hover:text-white
-          transition-all duration-300 ease-out"
+            className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
           >
             <g fill="none" stroke="currentColor" strokeWidth="1.5">
               <path
@@ -48,8 +52,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
             width="36"
             height="36"
             viewBox="0 0 24 24"
-            className="text-neutral-300 group-hover:text-white
-          transition-all duration-300 ease-out"
+            className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
           >
             <g fill="none" stroke="currentColor" strokeWidth="1.5">
               <path
@@ -62,14 +65,15 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
           </svg>
         )}
       </button>
+      {/* Input range to control the volume */}
       <input
         id="volume"
         type="range"
         min={0}
         max={1}
         step={0.01}
-        value={isMuted ? 0 : volume}
-        onChange={handleVolumeChange}
+        value={isMuted ? 0 : volume} // Show volume as 0 when muted
+        onChange={handleVolumeChange} // Handle volume change
         className="volume-input h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 w-0 group-hover:w-24 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100"
       />
     </div>

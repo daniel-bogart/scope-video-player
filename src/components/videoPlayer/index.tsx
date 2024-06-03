@@ -7,26 +7,29 @@ import useModal from "../../lib/useModal";
 import PlaySpeed from "./playSpeed";
 import VolumeControl from "./volumeControl";
 
+// Define the props for the VideoPlayer component
 interface VideoPlayerProps {
   url: string;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
-  const playerRef = useRef<ReactPlayer>(null);
-  const playIconRef = useRef<SVGPathElement>(null);
-  const pauseIconRef = useRef<SVGPathElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [played, setPlayed] = useState(0);
-  const [playbackRate, setPlaybackRate] = useState(1);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [volume, setVolume] = useState(0.8);
-  const [hoveredTime, setHoveredTime] = useState<number | null>(null);
-  const [duration, setDuration] = useState(0);
-  const { openModal } = useModal();
-  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<ReactPlayer>(null); // Reference to the ReactPlayer instance
+  const playIconRef = useRef<SVGPathElement>(null); // Reference to the play icon SVG
+  const pauseIconRef = useRef<SVGPathElement>(null); // Reference to the pause icon SVG
+  const [isPlaying, setIsPlaying] = useState(false); // State to track if the video is playing
+  const [played, setPlayed] = useState(0); // State to track the played progress
+  const [playbackRate, setPlaybackRate] = useState(1); // State to track the playback rate
+  const [isFullScreen, setIsFullScreen] = useState(false); // State to track if the video is in full-screen mode
+  const [volume, setVolume] = useState(0.8); // State to track the volume
+  const [hoveredTime, setHoveredTime] = useState<number | null>(null); // State to track the hovered time on the progress bar
+  const [duration, setDuration] = useState(0); // State to track the duration of the video
+  const { openModal } = useModal(); // Hook to handle modal actions
+  const videoContainerRef = useRef<HTMLDivElement>(null); // Reference to the video container div
 
+  // Check if the video URL includes "vimeo.com" to disable playback speed control for Vimeo videos
   const playBackSpeed = !url.includes("vimeo.com");
 
+  // Effect to handle the play/pause icon animation using GSAP
   useEffect(() => {
     if (playIconRef.current && pauseIconRef.current) {
       if (isPlaying) {
@@ -51,10 +54,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   }, [isPlaying]);
 
+  // Toggle play/pause state
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
 
+  // Rewind the video by 10 seconds
   const rewindVideo = () => {
     if (playerRef.current) {
       const currentTime = playerRef.current.getCurrentTime();
@@ -62,6 +67,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   };
 
+  // Fast forward the video by 10 seconds
   const ffVideo = () => {
     if (playerRef.current) {
       const currentTime = playerRef.current.getCurrentTime();
@@ -69,36 +75,43 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   };
 
+  // Handle the progress of the video
   const handleProgress = (state: { played: number }) => {
     setPlayed(state.played);
   };
 
+  // Handle seeking in the video
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (playerRef.current) {
       playerRef.current.seekTo(parseFloat(e.target.value));
     }
   };
 
+  // Handle the duration of the video
   const handleDuration = (duration: number) => {
     setDuration(duration);
   };
 
+  // Format the time in minutes and seconds
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  // Handle mouse move over the progress bar
   const handleMouseMove = (e: React.MouseEvent<HTMLInputElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / rect.width;
     setHoveredTime(pos * duration);
   };
 
+  // Handle mouse leave from the progress bar
   const handleMouseLeave = () => {
     setHoveredTime(null);
   };
 
+  // Effect to update the progress bar style
   useEffect(() => {
     const rangeInput = document.querySelector(
       'input[type="range"].video-progress'
@@ -108,6 +121,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
     }
   }, [played]);
 
+  // Toggle full-screen mode
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
       setIsFullScreen(true);
@@ -279,26 +293,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
                 </svg>
               </button>
             </div>
-            {playBackSpeed && <div className="flex justify-end items-center box-border w-full">
-              <PlaySpeed
-                playbackRate={playbackRate}
-                setPlaybackRate={setPlaybackRate}
-              />
-              <button onClick={toggleFullScreen} className="group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="36"
-                  height="36"
-                  viewBox="0 0 24 24"
-                  className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M3 21v-5h2v3h3v2zm13 0v-2h3v-3h2v5zM3 8V3h5v2H5v3zm16 0V5h-3V3h5v5z"
-                  />
-                </svg>
-              </button>
-            </div>}
+            {playBackSpeed && (
+              <div className="flex justify-end items-center box-border w-full">
+                <PlaySpeed
+                  playbackRate={playbackRate}
+                  setPlaybackRate={setPlaybackRate}
+                />
+                <button onClick={toggleFullScreen} className="group">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M3 21v-5h2v3h3v2zm13 0v-2h3v-3h2v5zM3 8V3h5v2H5v3zm16 0V5h-3V3h5v5z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

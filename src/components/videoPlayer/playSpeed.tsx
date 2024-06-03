@@ -1,8 +1,9 @@
 import React from "react";
 
+// Define the props for the PlaySpeed component
 interface PlaySpeedProps {
-  playbackRate: number;
-  setPlaybackRate: (rate: number) => void;
+  playbackRate: number; // Current playback rate
+  setPlaybackRate: (rate: number) => void; // Function to update the playback rate
 }
 
 const PlaySpeed: React.FC<PlaySpeedProps> = ({
@@ -11,14 +12,14 @@ const PlaySpeed: React.FC<PlaySpeedProps> = ({
 }) => {
   return (
     <div className="group flex space-x-2">
+      {/* Button to show playback speed options */}
       <button className="bg-transparent text-white p-2 rounded">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
           height="36"
           viewBox="0 0 24 24"
-          className="text-neutral-300 group-hover:text-white
-          transition-all duration-300 ease-out"
+          className="text-neutral-300 group-hover:text-white transition-all duration-300 ease-out"
         >
           <path
             fill="currentColor"
@@ -30,7 +31,9 @@ const PlaySpeed: React.FC<PlaySpeedProps> = ({
           />
         </svg>
       </button>
+      {/* Container for playback speed options */}
       <div className="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto flex justify-center items-center bg-neutral-800 bg-opacity-60 rounded-lg transition duration-300 ease-out">
+        {/* Button for normal speed (1x) */}
         <button
           onClick={() => setPlaybackRate(1)}
           className={`transition-all duration-300 ease-out text-white p-2 rounded ${
@@ -39,6 +42,7 @@ const PlaySpeed: React.FC<PlaySpeedProps> = ({
         >
           1x
         </button>
+        {/* Button for 1.5x speed */}
         <button
           onClick={() => setPlaybackRate(1.5)}
           className={`transition-all duration-300 ease-out text-white p-2 rounded ${
@@ -49,6 +53,7 @@ const PlaySpeed: React.FC<PlaySpeedProps> = ({
         >
           1.5x
         </button>
+        {/* Button for 2x speed */}
         <button
           onClick={() => setPlaybackRate(2)}
           className={`transition-all duration-300 ease-out text-white p-2 rounded ${

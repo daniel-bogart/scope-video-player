@@ -21,12 +21,13 @@ import SearchBar from "../../components/search";
 gsap.registerPlugin(ScrollTrigger);
 
 const Explore = () => {
-  const heroWrapperRef = useRef<HTMLDivElement | null>(null);
-  const userId = "daniel_bogart";
-  const dispatch = useDispatch<AppDispatch>();
-  const [visibleVideos, setVisibleVideos] = useState<number>(9);
-  const [filteredVideos, setFilteredVideos] = useState<Video[]>([]);
+  const heroWrapperRef = useRef<HTMLDivElement | null>(null); // Ref for the hero section to use with GSAP
+  const userId = "daniel_bogart"; // Placeholder user ID for API requests
+  const dispatch = useDispatch<AppDispatch>(); // Dispatch hook for Redux actions
+  const [visibleVideos, setVisibleVideos] = useState<number>(9); // State to manage the number of visible videos
+  const [filteredVideos, setFilteredVideos] = useState<Video[]>([]); // State to manage the filtered video list
 
+  // Define the structure of the video object
   interface Video {
     id: string;
     title: string;
@@ -35,11 +36,13 @@ const Explore = () => {
     user_id: string;
   }
 
+  // Fetch videos from the API based on the user ID
   const fetchVideosQuery = async (userId: string): Promise<Video[]> => {
     const { data } = await axios.get(
       `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
     );
 
+    // Filter and sort videos
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
       const filteredVideos = data.videos.filter((video: Video) => {
@@ -64,6 +67,7 @@ const Explore = () => {
     }
   };
 
+  // Use React Query to fetch videos and handle loading state
   const {
     data: videos,
     error,
@@ -72,8 +76,10 @@ const Explore = () => {
     fetchVideosQuery(userId)
   );
 
+  // Get video list from Redux store
   const videoList = useSelector((state: RootState) => state.videos.list);
 
+  // Update the Redux store and local state with fetched videos
   useEffect(() => {
     if (videos) {
       dispatch(setVideos(videos));
@@ -81,6 +87,7 @@ const Explore = () => {
     }
   }, [videos, dispatch]);
 
+  // GSAP animations for the hero section
   useEffect(() => {
     if (heroWrapperRef.current) {
       gsap.fromTo(
@@ -102,10 +109,12 @@ const Explore = () => {
     }
   }, []);
 
+  // Handler for loading more videos
   const handleViewMore = () => {
     setVisibleVideos((prevCount) => prevCount + 9);
   };
 
+  // Handler for search functionality
   const handleSearch = (query: string) => {
     if (videos) {
       const filtered = videos.filter((video) =>
@@ -115,6 +124,7 @@ const Explore = () => {
     }
   };
 
+  // Loading state UI
   if (isLoading)
     return (
       <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
@@ -125,8 +135,10 @@ const Explore = () => {
       </div>
     );
 
+  // Main component rendering
   return (
     <div className="">
+      {/* Hero section */}
       <section className="relative flex w-full h-[120vh] overflow-hidden rounded-custom items-start justify-start bg-black">
         <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30 gap-10 px-5">
           <div className="flex flex-col items-center justify-center">
@@ -157,6 +169,8 @@ const Explore = () => {
         </div>
         <div className="w-full bottom-0 h-[70vh] z-2 left-0 absolute bg-custom-fade"></div>
       </section>
+
+      {/* Main content section */}
       <section className="flex flex-col items-center justify-center w-full">
         <div className="flex flex-col w-full max-w-screen-2xl items-start justify-center xl:py-32 md:px-10 px-5 py-16">
           <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl xl:pb-10 lg:pb-8 sm:pb-4 font-light mb-4 text-white ">
@@ -200,6 +214,7 @@ const Explore = () => {
               </li>
             ))}
           </ul>
+          {/* View more button to load additional videos */}
           {visibleVideos < filteredVideos.length && (
             <div className="w-full flex items-center md:justify-center pt-10 justify-start">
               <CTA onClick={handleViewMore}>View more</CTA>

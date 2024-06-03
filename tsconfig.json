@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "custom.d.ts"
-  ],
+, "src/components/create/success"  ],
   "exclude": ["node_modules"]
 }

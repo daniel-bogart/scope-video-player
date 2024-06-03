@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
-import type { PluginAPI, PluginCreator } from "tailwindcss/types/config";
+
+interface PluginUtils {
+  addUtilities: (utilities: any, options?: any) => void;
+}
 
 const config: Config = {
   content: [
@@ -24,6 +27,9 @@ const config: Config = {
       transitionDelay: {
         "800": "800ms",
       },
+      translate: {
+        center: "-50%",
+      },
       transitionDuration: {
         "450": "0.45s",
       },
@@ -39,8 +45,12 @@ const config: Config = {
       height: {
         "video-vh": "calc(40.25vw)",
       },
+      backfaceVisibility: {
+        hidden: "hidden",
+      },
       brightness: {
         25: ".25",
+        60: ".6",
         70: ".7",
         80: ".8",
         175: "1.75",
@@ -60,8 +70,11 @@ const config: Config = {
       },
     },
   },
+  corePlugins: {
+    backdropFilter: true,
+  },
   plugins: [
-    function ({ addUtilities }: PluginAPI) {
+    function ({ addUtilities }: PluginUtils) {
       addUtilities({
         ".iframe-rounded": {
           "& > div > iframe": {

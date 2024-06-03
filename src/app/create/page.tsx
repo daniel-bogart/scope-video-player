@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { createVideo } from "../../features/videoSlice";
 import { AppDispatch } from "../../store/store";
 import  { isValidVideoUrl } from "@/lib/isValidUrl";
+import { Success } from "@/components/create";
+import useModal from "@/lib/useModal";
 import axios from "axios";
 
 interface VideoInput {
@@ -19,7 +21,9 @@ const CreateVideo: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const { openModal } = useModal();
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVideoUrl(e.target.value);
@@ -27,8 +31,9 @@ const CreateVideo: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null); 
     if (!videoUrl) {
-      alert("Please provide a video URL.");
+      setError("Please provide a video URL.");
       return;
     }
 
@@ -42,14 +47,14 @@ const CreateVideo: React.FC = () => {
     console.log("Video URL:", videoUrl);
 
     if (!isYoutubeOrVimeo(videoUrl)) {
-      alert("Please provide a valid YouTube or Vimeo URL.");
+      setError("Please provide a valid YouTube or Vimeo URL.");
       return;
     }
 
     const isUrlValid = await isValidVideoUrl(videoUrl);
 
     if (!isUrlValid) {
-      alert("The provided URL is not valid or accessible.");
+      setError("The provided URL is not valid or accessible.");
       return;
     }
 
@@ -71,19 +76,20 @@ const CreateVideo: React.FC = () => {
         }
       );
       dispatch(createVideo(video));
-      alert("Video created successfully");
+      openModal(<Success />);
       setTitle("");
       setDescription("");
       setVideoUrl("");
     } catch (error) {
       console.error("Error creating video:", error);
-      alert("Error creating video. Please try again later.");
+      setError("Error creating video. Please try again later.");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="pt-[100px] max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create New Video</h1>
+      {error && <div className="text-red-500 mb-2">{error}</div>}
       <input
         type="text"
         placeholder="Title"

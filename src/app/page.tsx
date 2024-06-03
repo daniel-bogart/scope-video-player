@@ -172,7 +172,7 @@ const Home = () => {
             </h1>
             <div className="flex sm:flex-row flex-col items-center justify-center gap-8">
               <CTA to="/create">Contribute</CTA>
-              <CTA theme="orange" to="/create">
+              <CTA theme="orange" to="/explore">
                 Browse all
               </CTA>
             </div>

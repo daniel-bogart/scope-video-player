@@ -28,6 +28,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const [modalComponent, setModalComponent] = useState<ReactNode | null>(null);
   const [showFloatingButton, setShowFloatingButton] = useState(false);
+  
 
   const headerRef = useRef<HTMLElement>(null);
   const floatingButtonRef = useRef<HTMLDivElement>(null);
@@ -126,6 +127,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
                 {children}
               </div>
               <FloatingNav />
+              {modalComponent}
             </ReactContext.Provider>
           </QueryClientProvider>
         </Provider>

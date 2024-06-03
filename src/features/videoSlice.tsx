@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import supabase from "../supabaseClient";
 import { AppThunk } from "../store/store";
 
 interface Video {
@@ -68,48 +67,5 @@ export const createVideo =
       console.error("Error creating video:", error);
     }
   };
-
-  export const uploadAndCreateVideo =
-    (
-      videoFile: File,
-      videoDetails: Omit<Video, "id" | "video_url">
-    ): AppThunk =>
-    async (dispatch) => {
-      try {
-        // Step 1: Upload the video file to Supabase Storage
-        const fileExt = videoFile.name.split(".").pop();
-        const fileName = `${Math.random()
-          .toString(36)
-          .substring(2)}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("videos")
-          .upload(fileName, videoFile);
-
-        if (uploadError) throw uploadError;
-
-        // Step 2: Get the public URL of the uploaded file
-        const urlResponse = supabase.storage
-          .from("videos")
-          .getPublicUrl(fileName);
-
-        // The getPublicUrl doesn't throw an error, so check if publicUrl is undefined
-        if (!urlResponse.data.publicUrl)
-          throw new Error("Failed to retrieve public URL");
-
-        // Step 3: Create the video entry in the database with the URL
-        const video = {
-          ...videoDetails,
-          video_url: urlResponse.data.publicUrl,
-        };
-        const response = await axios.post(
-          "https://your-api-endpoint/videos",
-          video
-        );
-        dispatch(addVideo({ ...video, id: response.data.id }));
-      } catch (error) {
-        console.error("Error uploading and creating video:", error);
-      }
-    };
-
 
 export default videoSlice.reducer;

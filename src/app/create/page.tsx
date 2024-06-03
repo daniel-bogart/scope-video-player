@@ -4,6 +4,7 @@ import React, { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { createVideo } from "../../features/videoSlice";
 import { AppDispatch } from "../../store/store";
+import  { isValidVideoUrl } from "@/lib/isValidUrl";
 import axios from "axios";
 
 interface VideoInput {
@@ -12,6 +13,7 @@ interface VideoInput {
   description: string;
   video_url: string;
 }
+
 
 const CreateVideo: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -27,6 +29,27 @@ const CreateVideo: React.FC = () => {
     e.preventDefault();
     if (!videoUrl) {
       alert("Please provide a video URL.");
+      return;
+    }
+
+    const isYoutubeOrVimeo = (url: string) => {
+      const youtubePattern =
+        /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+      const vimeoPattern = /^(https?:\/\/)?(www\.)?vimeo\.com\/.+$/;
+      return youtubePattern.test(url) || vimeoPattern.test(url);
+    };
+
+    console.log("Video URL:", videoUrl);
+
+    if (!isYoutubeOrVimeo(videoUrl)) {
+      alert("Please provide a valid YouTube or Vimeo URL.");
+      return;
+    }
+
+    const isUrlValid = await isValidVideoUrl(videoUrl);
+
+    if (!isUrlValid) {
+      alert("The provided URL is not valid or accessible.");
       return;
     }
 
@@ -49,7 +72,12 @@ const CreateVideo: React.FC = () => {
       );
       dispatch(createVideo(video));
       alert("Video created successfully");
+      setTitle("");
+      setDescription("");
+      setVideoUrl("");
     } catch (error) {
+      console.error("Error creating video:", error);
+      alert("Error creating video. Please try again later.");
     }
   };
 

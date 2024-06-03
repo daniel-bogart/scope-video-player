@@ -25,6 +25,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const { openModal } = useModal();
   const videoContainerRef = useRef<HTMLDivElement>(null);
 
+  const playBackSpeed = !url.includes("vimeo.com");
+
   useEffect(() => {
     if (playIconRef.current && pauseIconRef.current) {
       if (isPlaying) {
@@ -277,7 +279,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
                 </svg>
               </button>
             </div>
-            <div className="flex justify-end items-center box-border w-full">
+            {playBackSpeed && <div className="flex justify-end items-center box-border w-full">
               <PlaySpeed
                 playbackRate={playbackRate}
                 setPlaybackRate={setPlaybackRate}
@@ -296,7 +298,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
                   />
                 </svg>
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       </div>

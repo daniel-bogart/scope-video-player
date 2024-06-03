@@ -46,12 +46,15 @@ const Home = () => {
 
     const recentVideoNumber = isMobile ? 2 : 6;
 
+    console.log("data", data);
+
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
       const filteredVideos = data.videos.filter((video: Video) => {
+        const videoUrl = video.video_url.toLowerCase();
         if (
-          video.video_url.includes("blob") ||
-          uniqueUrls.has(video.video_url)
+          uniqueUrls.has(video.video_url) ||
+          !(videoUrl.includes("youtube") || videoUrl.includes("vimeo"))
         ) {
           return false;
         }
@@ -61,6 +64,8 @@ const Home = () => {
       const sortedVideos = filteredVideos.sort((a: Video, b: Video) =>
         a.id < b.id ? 1 : -1
       );
+
+      console.log("sortedVideos", sortedVideos);
       return sortedVideos.slice(0, recentVideoNumber);
     } else {
       console.error("API response is not as expected:", data);
@@ -166,7 +171,7 @@ const Home = () => {
               journeys.
             </h1>
             <div className="flex sm:flex-row flex-col items-center justify-center gap-8">
-              <CTA to="/create">Upload</CTA>
+              <CTA to="/create">Contribute</CTA>
               <CTA theme="orange" to="/create">
                 Browse all
               </CTA>
@@ -239,7 +244,7 @@ const Home = () => {
             ))}
           </ul>
           <div className="w-full flex items-center md:justify-center pt-10 justify-start">
-            <CTA to="/videos">View more</CTA>
+            <CTA to="/explore">View more</CTA>
           </div>
         </div>
       </section>

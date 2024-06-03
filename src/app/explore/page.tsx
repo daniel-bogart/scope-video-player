@@ -37,7 +37,6 @@ const Explore = () => {
       `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
     );
 
-    console.log("data", data);
 
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
@@ -56,7 +55,6 @@ const Explore = () => {
         a.id < b.id ? 1 : -1
       );
 
-      console.log("sortedVideos", sortedVideos);
       return sortedVideos;
     } else {
       console.error("API response is not as expected:", data);
@@ -91,7 +89,7 @@ const Explore = () => {
             trigger: heroWrapperRef.current,
             scrub: true,
             start: "top bottom",
-            end: "bottom top",
+            end: "bottom+=150% top",
           },
         }
       );
@@ -104,6 +102,16 @@ const Explore = () => {
   const handleViewMore = () => {
     setVisibleVideos((prevCount) => prevCount + 9);
   };
+
+  if (isLoading)
+    return (
+      <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
+        <span className="sr-only">Loading...</span>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+      </div>
+    );
 
   return (
     <div className="">

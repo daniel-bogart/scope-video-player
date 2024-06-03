@@ -46,8 +46,6 @@ const Home = () => {
 
     const recentVideoNumber = isMobile ? 2 : 6;
 
-    console.log("data", data);
-
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
       const filteredVideos = data.videos.filter((video: Video) => {
@@ -65,7 +63,6 @@ const Home = () => {
         a.id < b.id ? 1 : -1
       );
 
-      console.log("sortedVideos", sortedVideos);
       return sortedVideos.slice(0, recentVideoNumber);
     } else {
       console.error("API response is not as expected:", data);
@@ -153,13 +150,14 @@ const Home = () => {
     }
   }, [videoList]);
 
-  if (isLoading) return <div className="text-center mt-10">Loading...</div>;
-  if (error)
-    return <div className="text-center mt-10">Error loading videos</div>;
-
-  if (!Array.isArray(videoList) || videoList.length === 0) {
-    return <div className="text-center mt-10">No videos found</div>;
-  }
+  if (isLoading) return (
+    <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
+      <span className="sr-only">Loading...</span>
+      <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+      <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+      <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+    </div>
+  );
 
   return (
     <div className="w-full flex flex-col items-start justify-start overflow-hidden bg-black">

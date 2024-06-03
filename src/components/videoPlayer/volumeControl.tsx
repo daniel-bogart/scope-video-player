@@ -15,7 +15,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, setVolume }) => {
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    setVolume(isMuted ? 0.8 : 0); // Restore volume to 80% if unmuting
+    setVolume(isMuted ? 0.8 : 0);
   };
 
   return (

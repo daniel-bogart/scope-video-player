@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { notFound } from "next/navigation";
 import { fetchComments, createComment } from "../../../features/commentSlice";
-import { RootState, AppDispatch } from "../../../store/store"; // Ensure these imports are correct
+import { RootState, AppDispatch } from "../../../store/store";
 import { CommentList, CommentForm } from "../../../components/comments";
 import { Video } from "../../../types/Video";
 import Description from "../../../components/description";
@@ -17,11 +17,11 @@ interface VideoPageProps {
 
 const fetchVideo = async (id: string): Promise<Video | null> => {
   try {
-    const { data } = await axios.get(
+    const response = await axios.get(
       `https://take-home-assessment-423502.uc.r.appspot.com/videos/single?video_id=${id}`
     );
-    if (data && data.video) {
-      return data.video;
+    if (response.data && response.data.video) {
+      return response.data.video;
     }
     return null;
   } catch (error) {
@@ -39,45 +39,33 @@ const VideoPage = ({ params }: VideoPageProps) => {
   const [video, setVideo] = useState<Video | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  // Fetch comments from the Redux store
   const comments = useSelector(
-    (state: RootState) => state.comments.list[videoId] || [],
-    shallowEqual
+    (state: RootState) => state.comments.list[videoId] || []
   );
 
-
   useEffect(() => {
-    const loadVideo = async () => {
+    const loadData = async () => {
+      setLoading(true);
       const videoData = await fetchVideo(videoId);
       if (!videoData) {
         notFound();
-      } else {
-        setVideo(videoData);
+        setLoading(false);
+        return;
       }
+      setVideo(videoData);
+      await dispatch(fetchComments(videoId));
       setLoading(false);
-    };
-    loadVideo();
-  }, [videoId]);
-
-  useEffect(() => {
-    const loadComments = async () => {
-      setLoadingComments(true);
-      dispatch(fetchComments(videoId));
       setLoadingComments(false);
     };
-    loadComments();
+    loadData();
   }, [dispatch, videoId]);
 
   const handleAddComment = async (content: string, userId: string) => {
-    dispatch(createComment(videoId, content, userId));
-    dispatch(fetchComments(videoId)); // Refresh comments
+    await dispatch(createComment({ videoId, content, userId }));
+    await dispatch(fetchComments(videoId)); // Refresh comments
   };
-
-  useEffect(() => {
-    console.log("Comments updated:", comments);
-  }, [comments]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -87,6 +75,7 @@ const VideoPage = ({ params }: VideoPageProps) => {
     return <div>Video not found</div>;
   }
 
+
   return (
     <div className="flex flex-col items-center justify-center w-full box-border">
       <div className="flex flex-col items-center justify-center w-full max-w-video-vw w-full py-20 box-border md:px-10 px-5">
@@ -95,13 +84,11 @@ const VideoPage = ({ params }: VideoPageProps) => {
           <h1 className="text-2xl font-bold mb-4 text-white">{video.title}</h1>
           <Description description={video.description} />
         </div>
-        <div className="w-full py-10">
-          <h2 className="text-xl font-bold mb-4 text-white after:">Comments</h2>
+        <div className="flex flex-col gap-6 w-full py-10">
+          <h2 className="text-xl font-bold mb-4 text-white">Comments</h2>
           <CommentForm onAddComment={handleAddComment} />
-          <CommentList
-            comments={{ comments: (comments as any).comments }}
-            loading={loadingComments}
-          />
+          <span className="flex w-full h-[1px] bg-neutral-600"></span>
+          <CommentList comments={comments} loading={loadingComments} />
         </div>
       </div>
     </div>

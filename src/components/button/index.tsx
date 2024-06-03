@@ -18,6 +18,7 @@ const CTA: React.FC<CTAProps> = ({
   onClick=()=>{},
   to,
   className = "",
+  type,
   theme = "hollow", // Default to 'hollow' or another valid theme
 }) => {
   const baseClasses =
@@ -52,7 +53,7 @@ const CTA: React.FC<CTAProps> = ({
         </div>
       </Link>
     ) : (
-      <button onClick={onClick}>
+      <button type={type} onClick={onClick}>
         <div className={`${baseClasses} ${themeClasses[theme]} ${className}`}>
           <p className="transition-all ease-in-out duration-600 z-10 relative">
             {children}

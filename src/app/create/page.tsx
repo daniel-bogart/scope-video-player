@@ -4,9 +4,12 @@ import React, { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { createVideo } from "../../features/videoSlice";
 import { AppDispatch } from "../../store/store";
-import  { isValidVideoUrl } from "@/lib/isValidUrl";
+import { isValidVideoUrl } from "@/lib/isValidUrl";
 import { Success } from "@/components/create";
 import useModal from "@/lib/useModal";
+import Image from "next/image";
+import alpine from "../../../public/images/alpine.jpg";
+import CTA from "../../components/button";
 import axios from "axios";
 
 interface VideoInput {
@@ -15,7 +18,6 @@ interface VideoInput {
   description: string;
   video_url: string;
 }
-
 
 const CreateVideo: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -31,7 +33,7 @@ const CreateVideo: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
     if (!videoUrl) {
       setError("Please provide a video URL.");
       return;
@@ -87,39 +89,47 @@ const CreateVideo: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="pt-[100px] max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Create New Video</h1>
-      {error && <div className="text-red-500 mb-2">{error}</div>}
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-        className="w-full mb-2 p-2 border rounded"
-      />
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-        className="w-full mb-2 p-2 border rounded"
-      />
-      <div className="mb-4">
-        <label className="block mb-1">Enter Video URL:</label>
-        <input
-          type="url"
-          placeholder="https://youtube.com/video-id"
-          value={videoUrl}
-          onChange={handleUrlChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+    <div className="relative h-[100vh] flex flex-col items-center w-ful justify-center">
+      <div className="absolute flex flex-col inset-0 flex items-center justify-center z-30 gap-10 px-5">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-2xl mx-auto p-4 bg-black max-w-screen-sm w-full rounded-lg"
+        >
+          <h1 className="text-2xl text-white font-bold mb-4">Create New Video</h1>
+          {error && <div className="text-red-500 mb-2">{error}</div>}
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full mb-2 p-2 border-2 bg-black text-white rounded"
+          />
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="w-full mb-2 p-2 border-2 rounded bg-black text-white"
+          />
+          <div className="mb-4 bg-transparent">
+            <label className="text-white block mb-1">Enter Video URL:</label>
+            <input
+              type="url"
+              placeholder="https://youtube.com/video-id"
+              value={videoUrl}
+              onChange={handleUrlChange}
+              className="text-white w-full p-2 border-2 border-white bg-transparent rounded"
+              required
+            />
+          </div>
+          <CTA type="submit">
+            Create Video
+          </CTA>
+        </form>
       </div>
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-        Create Video
-      </button>
-    </form>
+      <Image src={alpine} alt="alpine" layout="fill" objectFit="cover" className="brightness-70"/>
+    </div>
   );
 };
 

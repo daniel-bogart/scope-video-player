@@ -91,7 +91,7 @@ const Explore = () => {
             trigger: heroWrapperRef.current,
             scrub: true,
             start: "top bottom",
-            end: "bottom top",
+            end: "bottom+=150% top",
           },
         }
       );

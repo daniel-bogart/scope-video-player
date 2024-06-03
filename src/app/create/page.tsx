@@ -103,7 +103,7 @@ const CreateVideo: React.FC = () => {
         <label className="block mb-1">Enter Video URL:</label>
         <input
           type="url"
-          placeholder="https://example.com/video.mp4"
+          placeholder="https://youtube.com/video-id"
           value={videoUrl}
           onChange={handleUrlChange}
           className="w-full p-2 border rounded"

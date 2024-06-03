@@ -111,7 +111,7 @@ const CreateVideo: React.FC = () => {
             className="w-full mb-2 p-2 border-2 rounded bg-black text-white"
           />
           <div className="mb-4 bg-transparent">
-            <label className="text-white block mb-1">Enter Video URL:</label>
+            <label className="text-white block mb-1">Enter Video URL from Youtube or Vimeo:</label>
             <input
               type="url"
               placeholder="https://youtube.com/video-id"

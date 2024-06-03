@@ -3,7 +3,13 @@ import { withNextVideo } from "next-video/process";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "img.youtube.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "img.youtube.com" },
+      { protocol: "https", hostname: "www.dailymotion.com" },
+      { protocol: "https", hostname: "vumbnail.com" },
+      // Add remote patterns for Dailymotion and Vimeo
+    ],
+    // Optionally, you can specify image size limits or other configurations here
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

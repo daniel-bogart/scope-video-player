@@ -9,11 +9,11 @@ export const navLinks: LinkItem[] = [
     url: "/",
   },
   {
-    title: "Upload",
+    title: "Contribute",
     url: "/create",
   },
   {
     title: "Explore",
-    url: "/videos",
+    url: "/explore",
   },
 ];

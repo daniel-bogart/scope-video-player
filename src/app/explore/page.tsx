@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import axios from "axios";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,13 +16,16 @@ import { truncateText } from "@/lib/charHelpers";
 import { getThumbnailUrl } from "../../lib/getThumbNailUrl";
 import { useDispatch, useSelector } from "react-redux";
 import CTA from "../../components/button";
+import SearchBar from "../../components/search";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Explore = () => {
-  const heroWrapperRef = useRef(null);
+  const heroWrapperRef = useRef<HTMLDivElement | null>(null);
   const userId = "daniel_bogart";
   const dispatch = useDispatch<AppDispatch>();
-  const [visibleVideos, setVisibleVideos] = useState(9);
+  const [visibleVideos, setVisibleVideos] = useState<number>(9);
+  const [filteredVideos, setFilteredVideos] = useState<Video[]>([]);
 
   interface Video {
     id: string;
@@ -36,7 +39,6 @@ const Explore = () => {
     const { data } = await axios.get(
       `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
     );
-
 
     if (data && Array.isArray(data.videos)) {
       const uniqueUrls = new Set<string>();
@@ -75,6 +77,7 @@ const Explore = () => {
   useEffect(() => {
     if (videos) {
       dispatch(setVideos(videos));
+      setFilteredVideos(videos);
     }
   }, [videos, dispatch]);
 
@@ -101,6 +104,15 @@ const Explore = () => {
 
   const handleViewMore = () => {
     setVisibleVideos((prevCount) => prevCount + 9);
+  };
+
+  const handleSearch = (query: string) => {
+    if (videos) {
+      const filtered = videos.filter((video) =>
+        video.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredVideos(filtered);
+    }
   };
 
   if (isLoading)
@@ -150,8 +162,10 @@ const Explore = () => {
           <h1 className="xl:text-9xl lg:text-7xl md:text-5xl sm:text-4xl text-2xl xl:pb-10 lg:pb-8 sm:pb-4 font-light mb-4 text-white ">
             Start exploring
           </h1>
-          <ul className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 w-full">
-            {videoList.slice(0, visibleVideos).map((video: Video) => (
+          {/* Integrate SearchBar Component */}
+          <SearchBar onSearch={handleSearch} />
+          <ul className="min-h-[1060px] grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 w-full">
+            {filteredVideos.slice(0, visibleVideos).map((video: Video) => (
               <li
                 key={video.id}
                 className="group w-full gap-1.5 flex flex-col transform transition-all duration-300 ease-out brightness-80 hover:brightness-100"
@@ -186,11 +200,9 @@ const Explore = () => {
               </li>
             ))}
           </ul>
-          {visibleVideos < videoList.length && (
+          {visibleVideos < filteredVideos.length && (
             <div className="w-full flex items-center md:justify-center pt-10 justify-start">
-              <CTA onClick={handleViewMore} >
-                View more
-              </CTA>
+              <CTA onClick={handleViewMore}>View more</CTA>
             </div>
           )}
         </div>

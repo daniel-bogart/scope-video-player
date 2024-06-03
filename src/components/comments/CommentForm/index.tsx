@@ -14,7 +14,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ onAddComment }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate first and last names to only contain letters and spaces
     const namePattern = /^[a-zA-Z\s]+$/;
     if (!namePattern.test(firstName) || !namePattern.test(lastName)) {
       setError(
@@ -23,10 +22,8 @@ const CommentForm: React.FC<CommentFormProps> = ({ onAddComment }) => {
       return;
     }
 
-    // Clear error if validation passes
     setError("");
 
-    // Convert spaces to dashes
     const formattedFirstName = firstName.replace(/\s+/g, "-");
     const formattedLastName = lastName.replace(/\s+/g, "-");
     const userId = `${formattedFirstName}_${formattedLastName}`;

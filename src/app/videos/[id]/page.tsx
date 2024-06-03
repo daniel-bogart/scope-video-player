@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
 import { notFound } from "next/navigation";
 import { fetchComments, createComment } from "../../../features/commentSlice";
-import { RootState, AppDispatch } from "../../../store/store"; // Ensure these imports are correct
+import { RootState, AppDispatch } from "../../../store/store";
 import { CommentList, CommentForm } from "../../../components/comments";
 import { Video } from "../../../types/Video";
 import Description from "../../../components/description";
@@ -41,7 +41,6 @@ const VideoPage = ({ params }: VideoPageProps) => {
   const [loadingComments, setLoadingComments] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
 
-  // Fetch comments from the Redux store
   const comments = useSelector(
     (state: RootState) => state.comments.list[videoId] || []
   );
@@ -76,7 +75,6 @@ const VideoPage = ({ params }: VideoPageProps) => {
     return <div>Video not found</div>;
   }
 
-  console.log("COMMENTS IN VIDEO PAGE:", comments)
 
   return (
     <div className="flex flex-col items-center justify-center w-full box-border">

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { RootState } from "../store/store"; // Import your RootState type
+import { RootState } from "../store/store";
 
 interface Comment {
   id: string;
@@ -27,10 +27,10 @@ export const fetchComments = createAsyncThunk<
     const response = await axios.get(
       `https://take-home-assessment-423502.uc.r.appspot.com/videos/comments?video_id=${videoId}`
     );
-    return response.data; // Assuming the response is the array of comments
+    return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
-    return rejectWithValue([]); // Return empty array in case of error
+    return rejectWithValue([]);
   }
 });
 
@@ -75,12 +75,10 @@ const commentSlice = createSlice({
       state,
       action: PayloadAction<{ videoId: string; comment: Comment }>
     ) => {
-      console.log("Adding comment:", action.payload.comment);
       if (!Array.isArray(state.list[action.payload.videoId])) {
         state.list[action.payload.videoId] = [];
       }
       state.list[action.payload.videoId].push(action.payload.comment);
-      console.log("state after adding:", state.list[action.payload.videoId]);
     },
   },
   extraReducers: (builder) => {

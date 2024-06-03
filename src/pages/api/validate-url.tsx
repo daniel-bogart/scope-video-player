@@ -35,10 +35,8 @@ export default async function handler(
       return;
     }
     try {
-      // Use GET for Vimeo to ensure compatibility
       const requestMethod = embedUrl.includes("vimeo.com") ? "get" : "head";
       const response = await axios[requestMethod](embedUrl);
-      console.log("URL checked", embedUrl, response.status);
       res.status(200).json({ valid: response.status === 200 });
     } catch (error) {
       console.error("Error validating URL", embedUrl, error);

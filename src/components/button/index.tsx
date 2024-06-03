@@ -1,12 +1,9 @@
-// CTA.tsx
 import React from "react";
 import Link from "next/link";
 import { CTAProps } from "./types";
 
-// Define a type for the themes
 type ThemeType = "hollow" | "orange" | "mint";
 
-// Use the ThemeType to define the themeClasses structure
 const themeClasses: Record<ThemeType, string> = {
   hollow: "bg-transparent border border-white text-white",
   orange: "bg-orange text-white hover:text-white",
@@ -19,7 +16,7 @@ const CTA: React.FC<CTAProps> = ({
   to,
   className = "",
   type,
-  theme = "hollow", // Default to 'hollow' or another valid theme
+  theme = "hollow",
 }) => {
   const baseClasses =
     "group w-full relative flex items-center justify-center cursor-pointer overflow-hidden rounded-full px-8 py-4 gap-3";

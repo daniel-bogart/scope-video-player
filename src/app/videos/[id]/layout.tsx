@@ -1,4 +1,3 @@
-// src/app/videos/[id]/layout.tsx
 import React from "react";
 
 const VideoLayout = ({ children }: { children: React.ReactNode }) => {

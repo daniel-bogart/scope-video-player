@@ -16,7 +16,7 @@ interface VideoState {
 }
 
 const initialState: VideoState = {
-  list: [], // Ensure initial state is an empty array
+  list: [], 
 };
 
 const videoSlice = createSlice({

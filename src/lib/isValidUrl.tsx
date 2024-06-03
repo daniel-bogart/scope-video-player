@@ -1,4 +1,3 @@
-// Assuming this function is part of a React component or module
 import axios from "axios";
 
 export const isValidVideoUrl = async (url: string): Promise<boolean> => {

@@ -46,8 +46,6 @@ const CreateVideo: React.FC = () => {
       return youtubePattern.test(url) || vimeoPattern.test(url);
     };
 
-    console.log("Video URL:", videoUrl);
-
     if (!isYoutubeOrVimeo(videoUrl)) {
       setError("Please provide a valid YouTube or Vimeo URL.");
       return;

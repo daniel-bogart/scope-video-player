@@ -26,7 +26,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, loading }) => {
   }
 
   // Display message if there are no comments
-  if (!comments.length) {
+  if (!comments.comments.length) {
     return (
       <div className="p-4">
         <p className="text-white">No comments yet</p>
@@ -37,7 +37,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, loading }) => {
   // Render the list of comments
   return (
     <div className="flex flex-col p-2 gap-4 rounded">
-      {comments.map((comment) => {
+      {comments.comments.map((comment) => {
         return (
           <div key={comment.id} className="mb-2">
             <small className="font-bold text-gray-400">

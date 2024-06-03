@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CTA from "../../components/button";
 gsap.registerPlugin(ScrollTrigger);
 
-const page = () => {
+const Explore = () => {
   const heroWrapperRef = useRef(null);
   const userId = "daniel_bogart";
   const dispatch = useDispatch<AppDispatch>();
@@ -180,9 +180,9 @@ const page = () => {
           </ul>
           {visibleVideos < videoList.length && (
             <div className="w-full flex items-center md:justify-center pt-10 justify-start">
-              <button onClick={handleViewMore} className="cta-button text-white">
+              <CTA onClick={handleViewMore} >
                 View more
-              </button>
+              </CTA>
             </div>
           )}
         </div>
@@ -191,4 +191,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Explore;

@@ -15,19 +15,6 @@ export default async function handler(
   const baseUrl =
     "https://take-home-assessment-423502.uc.r.appspot.com/videos/comments";
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      "https://www.learnwell-portfolio-project.com"
-    );
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.status(204).end();
-    return;
-  }
-
   try {
     let response;
     if (req.method === "GET" && video_id) {
@@ -44,9 +31,10 @@ export default async function handler(
       "Access-Control-Allow-Origin",
       "https://www.learnwell-portfolio-project.com"
     );
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     res.setHeader("Access-Control-Allow-Credentials", "true");
+
     res.status(200).json(response.data);
   } catch (error: any) {
     console.error(

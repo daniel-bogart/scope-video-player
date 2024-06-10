@@ -36,8 +36,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value:
-              "https://scope-video-player-6o7tvurip-danielbogarts-projects.vercel.app",
+            value: "https://www.learnwell-portfolio-project.com/",
           },
           {
             key: "Access-Control-Allow-Methods",

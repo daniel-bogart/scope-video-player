@@ -15,19 +15,39 @@ export default async function handler(
   const baseUrl =
     "https://take-home-assessment-423502.uc.r.appspot.com/videos/comments";
 
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      "https://www.learnwell-portfolio-project.com"
+    );
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.status(204).end();
+    return;
+  }
+
   try {
     let response;
     if (req.method === "GET" && video_id) {
       response = await axios.get<Comment[]>(`${baseUrl}?video_id=${video_id}`);
-      res.status(200).json(response.data);
     } else if (req.method === "POST") {
       response = await axios.post<Comment[]>(baseUrl, req.body);
-      res.status(200).json(response.data);
     } else {
       res.setHeader("Allow", ["GET", "POST"]);
       res.status(405).json({ error: `Method ${req.method} Not Allowed` });
       return;
     }
+
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      "https://www.learnwell-portfolio-project.com"
+    );
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.status(200).json(response.data);
   } catch (error: any) {
     console.error(
       "Error handling comments:",
@@ -35,7 +55,7 @@ export default async function handler(
     );
     res.status(500).json({
       error: "Failed to handle comments",
-      details: error.message, // Now properly typed and allowed
+      details: error.message,
     });
   }
 }

@@ -28,9 +28,7 @@ export const fetchComments = createAsyncThunk<
   { state: RootState }
 >("comments/fetchComments", async (videoId, { rejectWithValue }) => {
   try {
-    const response = await axios.get(
-      `https://take-home-assessment-423502.uc.r.appspot.com/videos/comments?video_id=${videoId}`
-    );
+    const response = await axios.get(`/api/comments?video_id=${videoId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
@@ -47,14 +45,11 @@ export const createComment = createAsyncThunk<
   "comments/createComment",
   async ({ videoId, content, userId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://take-home-assessment-423502.uc.r.appspot.com/videos/comments",
-        {
-          video_id: videoId,
-          content,
-          user_id: userId,
-        }
-      );
+      const response = await axios.post("/api/comments", {
+        video_id: videoId,
+        content,
+        user_id: userId,
+      });
       return response.data;
     } catch (error) {
       console.error("Error creating comment:", error);

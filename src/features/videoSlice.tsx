@@ -49,15 +49,12 @@ export const fetchVideos =
   (userId: string): AppThunk =>
   async (dispatch) => {
     try {
-      // Make an API call to fetch videos
-      const response = await axios.get(
-        `https://take-home-assessment-423502.uc.r.appspot.com/videos?user_id=${userId}`
-      );
-      if (Array.isArray(response.data)) {
-        // Dispatch action to set videos in the Redux store
-        dispatch(setVideos(response.data));
+      const response = await fetch(`/api/videos?userId=${userId}`);
+      const videos = await response.json();
+      if (response.ok) {
+        dispatch(setVideos(videos));
       } else {
-        console.error("Fetched data is not an array:", response.data);
+        throw new Error("Failed to fetch videos");
       }
     } catch (error) {
       console.error("Error fetching videos:", error);

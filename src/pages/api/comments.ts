@@ -19,9 +19,23 @@ export default async function handler(
     let response;
     if (req.method === "GET" && video_id) {
       response = await axios.get<Comment[]>(`${baseUrl}?video_id=${video_id}`);
+      res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://scope-video-player-6o7tvurip-danielbogarts-projects.vercel.app"
+      );
+
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
       res.status(200).json(response.data);
     } else if (req.method === "POST") {
       response = await axios.post<Comment[]>(baseUrl, req.body);
+      res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://scope-video-player-6o7tvurip-danielbogarts-projects.vercel.app"
+      );
+
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
       res.status(200).json(response.data);
     } else {
       res.setHeader("Allow", ["GET", "POST"]);

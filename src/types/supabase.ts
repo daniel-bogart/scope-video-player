@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      Comments: {
+        Row: {
+          created_at: string
+          id: string
+          text: string
+          updated_at: string | null
+          user_id: string | null
+          video_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          text?: string
+          updated_at?: string | null
+          user_id?: string | null
+          video_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          text?: string
+          updated_at?: string | null
+          user_id?: string | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "Profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "Comments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "Videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Profiles: {
         Row: {
           created_at: string
